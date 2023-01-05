@@ -1,0 +1,13 @@
+.bg-image{
+    background-image: url(../Images/backgroundimage-modified.jpg);
+    background-size: cover;
+}
+.text-center{
+    color: rgb(238, 131, 149);
+}
+.register:hover{
+    color: pink;
+}
+.btn-color{
+    color: green;
+}
