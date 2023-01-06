@@ -43,12 +43,28 @@ def login():
         user_dict = {}
         user_dict = db['customer']
         db.close()
+        user_logging = []
         for user in user_dict.values():
             if user.get_username() == username:
+                user_logging.append(user)
+                print(user.get_password())
+            else:
+                error = "Username does not exist"
+        for user in user_logging:
+            if user.get_password() == password:
                 login_user(user)
                 return redirect(url_for('home'))
             else:
-                error = 'test'
+                error = "Password incorrect"
+        #for user in user_dict.values():
+        #    if user.get_username() == username:
+        #        user_logging.append(user)
+            #for user in user_logging:
+            #    if user.get_password() == password:
+            #        login_user(user)
+            #        return redirect(url_for('home'))
+        #    else:
+        #        error = "test"
 
     return render_template('login.html', form=login_form, error=error)
 
@@ -60,7 +76,7 @@ def register():
     if request.method == "POST":
         username = register_form.username.data
         email = register_form.email.data
-        password = register_form.email.data
+        password = register_form.password1.data
         current_gmt = time.gmtime()
         id = calendar.timegm(current_gmt)
         cust_dict = {}
