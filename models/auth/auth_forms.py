@@ -1,4 +1,4 @@
-from wtforms import StringField, EmailField, PasswordField, SubmitField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, IntegerField, DateField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from flask_wtf import FlaskForm
 
@@ -15,3 +15,12 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[Length(min=5, max=15), DataRequired()])
     password = PasswordField('Password', validators=[Length(min=8), DataRequired()])
     submit = SubmitField('Log in')
+
+
+class UpdateProfileForm(FlaskForm):
+    username = StringField('Username', validators=[Length(min=5, max=15), DataRequired()])
+    location = StringField('Location')
+    email = EmailField('Email', validators=[Email(), DataRequired()])
+    phone = IntegerField('Phone number', validators=[Length(8)])
+    birthday = DateField('Birthday')
+    submit = SubmitField('Save Changes')

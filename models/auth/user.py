@@ -7,8 +7,9 @@ class User(UserMixin):
         self.__email = email
         self.__password = password
         self.__id = id
-        self.__birthdate = None
+        self.__birthday = None
         self.__phone = None
+        self.__location = None
 
     def set_username(self, username):
         self.__username = username
@@ -22,11 +23,14 @@ class User(UserMixin):
     def set_id(self, id):
         self.__id = id
 
-    def set_birthdate(self, birthdate):
-        self.__birthdate = birthdate
+    def set_birthdate(self, birthday):
+        self.__birthday = birthday
 
     def set_phone(self, phone):
         self.__phone = phone
+
+    def set_location(self, location):
+        self.__location = location
 
     def get_username(self):
         return self.__username
@@ -40,8 +44,11 @@ class User(UserMixin):
     def get_id(self):
         return str(self.__id)
 
-    def get_birthdate(self):
-        return self.__birthdate
+    def get_birthday(self):
+        return self.__birthday
 
     def get_phone(self):
         return self.__phone
+
+    def get_location(self):
+        return self.__location
