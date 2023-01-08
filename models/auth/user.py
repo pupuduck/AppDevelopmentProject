@@ -23,7 +23,7 @@ class User(UserMixin):
     def set_id(self, id):
         self.__id = id
 
-    def set_birthdate(self, birthday):
+    def set_birthday(self, birthday):
         self.__birthday = birthday
 
     def set_phone(self, phone):
