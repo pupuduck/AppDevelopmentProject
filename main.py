@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm
 from models.auth.user import User
 import shelve
@@ -133,9 +133,33 @@ def update():
 
 
 @app.route('/logout', methods=['GET'])
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route('/delete', methods=['GET'])
+def delete():
+    try:
+        db = shelve.open('DB/Customer/customer')
+        user_dict = {}
+        user_dict = db['customer']
+        if 'customer' in db:
+            user_dict = db['customer']
+        else:
+            db['customer'] = user_dict
+        user_dict.pop(current_user.get_id(), None)
+        logout()
+
+        db['customer'] = user_dict
+        db.close()
+    except IOError:
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
+
+    return render_template('home.html')
 
 
 if __name__ == '__main__':
