@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm
 from models.auth.user import User
+from models.cust.contactMessage import Message
+from models.cust.contactForm import CreateMessageForm
 import shelve
 import calendar
 import time
@@ -13,6 +15,9 @@ app.config["SECRET_KEY"] = "xxkxcZKH2TxsSw7bew8D9gLpCaa3YYnn"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+# start of account management
 
 
 @login_manager.user_loader
@@ -195,10 +200,71 @@ def createStaff():
         print(f"unknown error occurred as {ex}")
 
 
+# end of account management
+# start customer support
+
+
 @app.route('/contactUs', methods=['GET', 'POST'])
 def contactUs():
-    return render_template('contactUs.html')
+    create_message_form = CreateMessageForm()
+    if request.method == "POST":
+        name = create_message_form.name.data
+        email = create_message_form.email.data
+        subject = create_message_form.subject.data
+        message = create_message_form.message.data
+        message_dict = {}
+        try:
+            db = shelve.open('DB/Message/message')
+            if 'message' in db:
+                message_dict = db['message']
+            else:
+                db['message'] = message_dict
 
+            message = Message(name, email, subject, message)
+            message_dict[message.get_message_id()] = message
+            db['message'] = message_dict
+            db.close()
+        except IOError:
+            print("Error IO Error")
+        except Exception as ex:
+            print(f"unknown error occurred as {ex}")
+
+    return render_template('contactUs.html', form=create_message_form)
+
+
+@app.route('/retrieveMessages', methods=["GET", "POST"])
+def retrieveMessages():
+    message_dict = {}
+    db = shelve.open('DB/Message/message', 'r')
+    message_dict = db['message']
+    db.close()
+
+    message_list = []
+    for key in message_dict:
+        user = message_dict.get(key)
+        message_list.append(user)
+
+    return render_template('retrieveMessages.html', count=len(message_list), message_list=message_list)
+
+
+@app.route('/deleteMessage/<int:id>', methods=['POST'])
+def delete_message(id):
+    message_dict = {}
+    db = shelve.open('DB/Message/message', 'w')
+    message_dict = db['message']
+
+    message_dict.pop(id)
+
+    db['message'] = message_dict
+    db.close()
+
+    return redirect(url_for('retrieveMessages'))
+
+
+# end customer support
+# start of hiring
+
+# end of hiring
 
 if __name__ == '__main__':
     app.run(debug=True)

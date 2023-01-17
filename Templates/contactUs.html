@@ -2,36 +2,118 @@
 {% block title %}Dr. Donuts{% endblock %}
 <link rel="stylesheet" href="../static/css/contactUs">
 {% block content %}
-<form>
-  <!-- Name input -->
-  <div class="form-outline mb-4">
-    <input type="text" id="form4Example1" class="form-control" />
-    <label class="form-label" for="form4Example1">Name</label>
-  </div>
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 
-  <!-- Email input -->
-  <div class="form-outline mb-4">
-    <input type="email" id="form4Example2" class="form-control" />
-    <label class="form-label" for="form4Example2">Email address</label>
-  </div>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <!-- Message input -->
-  <div class="form-outline mb-4">
-    <textarea class="form-control" id="form4Example3" rows="4"></textarea>
-    <label class="form-label" for="form4Example3">Message</label>
-  </div>
+	<link rel="stylesheet" href="../static/css/contactUs.css">
 
-  <!-- Checkbox -->
-  <div class="form-check d-flex justify-content-center mb-4">
-    <input class="form-check-input me-2" type="checkbox" value="" id="form4Example4" checked />
-    <label class="form-check-label" for="form4Example4">
-      Send me a copy of this message
-    </label>
-  </div>
-
-  <!-- Submit button -->
-  <button type="submit" class="btn btn-primary btn-block mb-4">Send</button>
-</form>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-12">
+					<div class="wrapper">
+						<div class="row mb-5">
+							<div class="col-md-3">
+								<div class="dbox w-100 text-center">
+			        		<div class="icon d-flex align-items-center justify-content-center">
+			        			<span class="fa fa-map-marker"></span>
+			        		</div>
+			        		<div class="text">
+				            <p><span>Address:</span> 180 Ang Mo Kio Ave 8, Singapore 569830</p>
+				          </div>
+			          </div>
+							</div>
+							<div class="col-md-3">
+								<div class="dbox w-100 text-center">
+			        		<div class="icon d-flex align-items-center justify-content-center">
+			        			<span class="fa fa-phone"></span>
+			        		</div>
+			        		<div class="text">
+				            <p><span>Phone:</span> <a href="tel://1234567920">+65 9823 5792</a></p>
+				          </div>
+			          </div>
+							</div>
+							<div class="col-md-3">
+								<div class="dbox w-100 text-center">
+			        		<div class="icon d-flex align-items-center justify-content-center">
+			        			<span class="fa fa-paper-plane"></span>
+			        		</div>
+			        		<div class="text">
+				            <p><span>Email:</span> <a href="mailto:info@yoursite.com">info@doctordonuts.com</a></p>
+				          </div>
+			          </div>
+							</div>
+							<div class="col-md-3">
+								<div class="dbox w-100 text-center">
+			        		<div class="icon d-flex align-items-center justify-content-center">
+			        			<span class="fa fa-globe"></span>
+			        		</div>
+			        		<div class="text">
+				            <p><span>Website</span> <a href="#">doctordonuts.com</a></p>
+				          </div>
+			          </div>
+							</div>
+						</div>
+						<div class="row no-gutters">
+							<div class="col-md-7">
+								<div class="contact-wrap w-100 p-md-5 p-4">
+									<h3 class="mb-4">Contact Us</h3>
+									<div id="form-message-warning" class="mb-4"></div>
+				      		<div id="form-message-success" class="mb-4">
+				            Your message was sent, thank you!
+				      		</div>
+									<form method="POST" id="contactForm" name="contactForm" class="contactForm">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													{{ form.name.label( class="label") }}
+													{{ form.name(class="form-control") }}
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													{{ form.email.label( class="label") }}
+													{{ form.email(class="form-control") }}
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													{{ form.subject.label( class="label") }}
+													{{ form.subject(class="form-control") }}
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													{{ form.message.label( class="label") }}
+													{{ form.message(class="form-control", id="message") }}
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													{{ form.submit(class="btn btn-primary") }}
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="col-md-5 d-flex align-items-stretch">
+								<div class="info-wrap w-100 p-5 img" style="background-image: url(../static/images/donut_lead.jpg);"><img
+                                        src="" alt="">
+			          </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
 
 {% endblock %}

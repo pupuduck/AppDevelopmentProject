@@ -24,6 +24,17 @@
           </ul>
         </li>
         {% if current_user.is_authenticated %}
+        {% if current_user.get_role() == "Admin" %}
+         <li class="nav-item dropdown">
+          <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Administrative
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="/sales">Sales</a></li>
+            <li><a class="dropdown-item" href="/retrieveMessages">Retrieve messages</a></li>
+          </ul>
+        </li>
+        {% endif %}
           <li class="nav-item dropdown">
           <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Profile
@@ -33,11 +44,6 @@
             <li><a class="dropdown-item" href="/logout">Log out</a></li>
           </ul>
         </li>
-        {% if current_user.get_role() == "Admin" %}
-        <li class="nav-item">
-          <a class="nav-link mx-2" href="/sales">Sales</a>
-        </li>
-        {% endif %}
         {% else %}
         <li class="nav-item">
           <a class="nav-link mx-2" href="/login">Log in</a>
