@@ -2,7 +2,7 @@ from flask_login import UserMixin
 
 
 class User(UserMixin):
-    def __init__(self, username, email, password, id):
+    def __init__(self, username, email, password, id, role):
         self.__username = username
         self.__email = email
         self.__password = password
@@ -10,6 +10,7 @@ class User(UserMixin):
         self.__birthday = None
         self.__phone = None
         self.__location = None
+        self.__role = role
 
     def set_username(self, username):
         self.__username = username
@@ -32,6 +33,9 @@ class User(UserMixin):
     def set_location(self, location):
         self.__location = location
 
+    def set_role(self, role):
+        self.__role = role
+
     def get_username(self):
         return self.__username
 
@@ -52,3 +56,6 @@ class User(UserMixin):
 
     def get_location(self):
         return self.__location
+
+    def get_role(self):
+        return self.__role

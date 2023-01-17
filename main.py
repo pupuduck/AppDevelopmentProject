@@ -59,6 +59,7 @@ def login():
                 error = 'Password is incorrect'
             else:
                 login_user(user)
+                print(f"User {current_user.get_id()} logged in")
                 return redirect(url_for('home'))
 
     return render_template('login.html', form=login_form, error=error)
@@ -72,6 +73,7 @@ def register():
         username = register_form.username.data
         email = register_form.email.data
         password = register_form.password1.data
+        password1 = register_form.password2.data
         current_GMT = time.gmtime()
         id = int(calendar.timegm(current_GMT))
         cust_dict = {}
@@ -91,11 +93,14 @@ def register():
                 error = "Email is already taken"
             elif username in cust_dict:
                 error = "Username is already taken"
+            elif password != password1:
+                error = "Passwords do not match"
             else:
-                c1 = User(username, email, password, id)
+                c1 = User(username, email, password, id, 'Customer')
                 cust_dict[c1.get_id()] = c1
                 db['customer'] = cust_dict
                 db.close()
+                print(f"Account created, id = {id}")
                 return redirect(url_for('login'))
         except IOError:
             print("Error IO Error")
@@ -120,8 +125,7 @@ def update():
                 users.set_birthday(update_form.birthday.data)
                 db['customer'] = user_dict
                 db.close()
-            else:
-                print('error')
+                print(f"User {current_user.get_id()} profile updated")
     else:
         update_form.username.data = current_user.get_username()
         update_form.email.data = current_user.get_email()
@@ -135,11 +139,13 @@ def update():
 @app.route('/logout', methods=['GET'])
 @login_required
 def logout():
+    print(f"User {current_user.get_id()} logged out")
     logout_user()
     return redirect(url_for('home'))
 
 
 @app.route('/delete', methods=['GET'])
+@login_required
 def delete():
     try:
         db = shelve.open('DB/Customer/customer')
@@ -149,6 +155,7 @@ def delete():
             user_dict = db['customer']
         else:
             db['customer'] = user_dict
+        print(f"User {current_user.get_id()} account deleted")
         user_dict.pop(current_user.get_id(), None)
         logout()
 
@@ -160,6 +167,37 @@ def delete():
         print(f"unknown error occurred as {ex}")
 
     return render_template('home.html')
+
+
+def createStaff():
+    username = input("Enter name: ")
+    email = input("Enter email: ")
+    password = "AdminPassword123"
+    current_GMT = time.gmtime()
+    id = int(calendar.timegm(current_GMT))
+    role = "Admin"
+    cust_dict = {}
+    try:
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            cust_dict = db['customer']
+        else:
+            db['customer'] = cust_dict
+
+        Admin = User(username, email, password, id, role)
+        cust_dict[Admin.get_id()] = Admin
+        db['customer'] = cust_dict
+        db.close()
+
+    except IOError:
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
+
+
+@app.route('/contactUs', methods=['GET', 'POST'])
+def contactUs():
+    return render_template('contactUs.html')
 
 
 if __name__ == '__main__':
