@@ -247,6 +247,7 @@ def contactUs():
             message_dict[message.get_message_id()] = message
             db['message'] = message_dict
             db.close()
+            flash('Message sent successfully')
         except IOError:
             print("Error IO Error")
         except Exception as ex:
