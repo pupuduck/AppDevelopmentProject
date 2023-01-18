@@ -4,6 +4,9 @@ from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm, U
 from models.auth.user import User
 from models.cust.contactMessage import Message
 from models.cust.contactForm import CreateMessageForm
+from models.hiring.hiringForm import CreateResumesForm, CreateJobPositionsForm
+from models.hiring.resume import Resumes
+from models.hiring.jobPositions import JobPositions
 import shelve
 import calendar
 import time
@@ -133,6 +136,7 @@ def update():
                 users.set_location(update_form.location.data)
                 users.set_phone(update_form.phone.data)
                 users.set_birthday(update_form.birthday.data)
+                users.set_image(update_form.image.data)
                 db['customer'] = user_dict
                 db.close()
                 flash('Profile successfully updated')
@@ -143,6 +147,7 @@ def update():
         update_form.location.data = current_user.get_location()
         update_form.phone.data = current_user.get_phone()
         update_form.birthday.data = current_user.get_birthday()
+        update_form.image.data = current_user.get_image()
 
     if request.method == "POST" and submit2:
         password1 = update_password_form.password1.data
@@ -223,6 +228,7 @@ def createStaff():
     except Exception as ex:
         print(f"unknown error occurred as {ex}")
 
+
 # end of account management
 # start customer support
 
@@ -287,8 +293,199 @@ def delete_message(id):
 
 # end customer support
 # start of hiring
+@app.route('/createResumes', methods=['GET', 'POST'])
+def create_resumes():
+    create_resumes_form = CreateResumesForm(request.form)
+    if request.method == 'POST' and create_resumes_form.validate():
+        resumes_dict = {}
+        db = shelve.open('DB/Hiring/resume')
 
+        try:
+            resumes_dict = db['Resumes']
+        except:
+            print("Error in retrieving Resumes from Resumes.db.")
+
+        resumes = Resumes(create_resumes_form.first_name.data, create_resumes_form.last_name.data,
+                          create_resumes_form.email.data, create_resumes_form.sgorpr.data,
+                          create_resumes_form.citizenship.data, create_resumes_form.address.data,
+                          create_resumes_form.contactno.data, create_resumes_form.preferredjob.data,create_resumes_form.uploadfile.data )
+        for key in resumes_dict:
+            if key == resumes.get_resumes_id():
+                resumes.set_resumes_id(int(resumes.get_resumes_id()) + 1)
+        resumes_dict[resumes.get_resumes_id()] = resumes
+        db['Resumes'] = resumes_dict
+
+        db.close()
+
+        return redirect(url_for('retrieve_resumes'))
+    return render_template('createResumes.html', form=create_resumes_form)
+
+
+@app.route('/createJobPositions', methods=['GET', 'POST'])
+def create_jobpositions():
+    create_jobpositions_form = CreateJobPositionsForm(request.form)
+    if request.method == 'POST' and create_jobpositions_form.validate():
+        jobpositions_dict = {}
+        db = shelve.open('DB/Hiring/jobPositions')
+
+        try:
+            jobpositions_dict = db['JobPositions']
+        except:
+            print("Error in retrieving Job Positions from JobPositions.db.")
+
+        jobpositions = JobPositions(create_jobpositions_form.jobname.data,
+                                    create_jobpositions_form.jobavailability.data,
+                                    create_jobpositions_form.jobrequirements.data,
+                                    create_jobpositions_form.jobresponsibility.data,
+                                    create_jobpositions_form.jobsalary.data)
+        #        customers_dict[customer.get_customer_id()] = customer
+        for key in jobpositions_dict:
+            if key == jobpositions.get_id():
+                jobpositions.set_id(int(jobpositions.get_id() + 1))
+        jobpositions_dict[jobpositions.get_id()] = jobpositions
+        db['JobPositions'] = jobpositions_dict
+
+        db.close()
+
+        return redirect(url_for('retrieve_jobpositions'))
+    return render_template('createJobPositions.html', form=create_jobpositions_form)
+
+
+@app.route('/retrieveResumes')
+def retrieve_resumes():
+    resumes_dict = {}
+    db = shelve.open('DB/Hiring/resume')
+    resumes_dict = db['Resumes']
+    db.close()
+
+    resumes_list = []
+    for key in resumes_dict:
+        resumes = resumes_dict.get(key)
+        resumes_list.append(resumes)
+
+    return render_template('retrieveResumes.html', count=len(resumes_list), resumes_list=resumes_list)
+
+
+@app.route('/retrieveJobPositions')
+def retrieve_jobpositions():
+    jobpositions_dict = {}
+    db = shelve.open('DB/Hiring/jobPositions')
+    jobpositions_dict = db['JobPositions']
+    db.close()
+
+    jobpositions_list = []
+    for key in jobpositions_dict:
+        jobpositions = jobpositions_dict.get(key)
+        jobpositions_list.append(jobpositions)
+
+    return render_template('retrieveJobPositions.html', count=len(jobpositions_list), jobpositions_list=jobpositions_list)
+
+@app.route('/updateResumes/<int:id>/', methods=['GET', 'POST'])
+def update_resumes(id):
+    update_resumes_form = CreateResumesForm(request.form)
+    if request.method == 'POST' and update_resumes_form.validate():
+        resumes_dict = {}
+        db = shelve.open('DB/Hiring/resume')
+        resumes_dict = db['Resumes']
+
+        resumes = resumes_dict.get(id)
+        resumes.set_first_name(update_resumes_form.first_name.data)
+        resumes.set_last_name(update_resumes_form.last_name.data)
+        resumes.set_email(update_resumes_form.email.data)
+        resumes.set_sgorpr(update_resumes_form.sgorpr.data)
+        resumes.set_citizenship(update_resumes_form.citizenship.data)
+        resumes.set_address(update_resumes_form.address.data)
+        resumes.set_contactno(update_resumes_form.contactno.data)
+        resumes.set_preferredjob(update_resumes_form.preferredjob.data)
+        resumes.set_uploadfile(update_resumes_form.uploadfile.data)
+
+        db['Resumes'] = resumes_dict
+        db.close()
+
+        return redirect(url_for('retrieve_resumes'))
+    else:
+        resumes_dict = {}
+        db = shelve.open('DB/Hiring/resume')
+        resumes_dict = db['Resumes']
+        db.close()
+
+        resumes = resumes_dict.get(id)
+        update_resumes_form.first_name.data = resumes.get_first_name()
+        update_resumes_form.last_name.data = resumes.get_last_name()
+        update_resumes_form.email.data = resumes.get_email()
+        update_resumes_form.sgorpr.data = resumes.get_sgorpr()
+        update_resumes_form.citizenship.data = resumes.get_citizenship()
+        update_resumes_form.address.data = resumes.get_address()
+        update_resumes_form.contactno.data = resumes.get_contactno()
+        update_resumes_form.preferredjob.data = resumes.get_preferredjob()
+        update_resumes_form.uploadfile.data = resumes.get_uploadfile()
+
+        return render_template('updateResumes.html', form=update_resumes_form)
+
+
+@app.route('/updateJobPositions/<int:id>/', methods=['GET', 'POST'])
+def update_jobpositions(id):
+    update_jobpositions_form = CreateJobPositionsForm(request.form)
+    if request.method == 'POST' and update_jobpositions_form.validate():
+        jobpositions_dict = {}
+        db = shelve.open('DB/Hiring/jobPositions')
+        jobpositions_dict = db['JobPositions']
+
+        jobpositions = jobpositions_dict.get(id)
+        jobpositions.set_jobname(update_jobpositions_form.jobname.data)
+        jobpositions.set_jobavailability(update_jobpositions_form.jobavailability.data)
+        jobpositions.set_jobrequirements(update_jobpositions_form.jobrequirements.data)
+        jobpositions.set_jobresponsibility(update_jobpositions_form.jobresponsibility.data)
+        jobpositions.set_jobsalary(update_jobpositions_form.jobsalary.data)
+
+        db['JobPositions'] = jobpositions_dict
+        db.close()
+
+        return redirect(url_for('retrieve_jobpositions'))
+    else:
+        jobpositions_dict = {}
+        db = shelve.open('DB/Hiring/jobPositions')
+        jobpositions_dict = db['JobPositions']
+        db.close()
+
+        jobpositions = jobpositions_dict.get(id)
+        update_jobpositions_form.jobname.data = jobpositions.get_jobname()
+        update_jobpositions_form.jobavailability.data = jobpositions.get_jobavailability()
+
+        update_jobpositions_form.jobrequirements.data = jobpositions.get_jobrequirements()
+        update_jobpositions_form.jobresponsibility.data = jobpositions.get_jobresponsibility()
+        update_jobpositions_form.jobsalary.data = jobpositions.get_jobsalary()
+
+        return render_template('updateJobPositions.html', form=update_jobpositions_form)
+
+
+@app.route('/deleteResumes/<int:id>', methods=['POST'])
+def delete_resumes(id):
+    resumes_dict = {}
+    db = shelve.open('DB/Hiring/resume')
+    resumes_dict = db['Resumes']
+
+    resumes_dict.pop(id)
+
+    db['Resumes'] = resumes_dict
+    db.close()
+
+    return redirect(url_for('retrieve_resumes'))
+
+
+@app.route('/deleteJobPositions/<int:id>', methods=['POST'])
+def delete_jobpositions(id):
+    jobpositions_dict = {}
+    db = shelve.open('DB/Hiring/jobPositions')
+    jobpositions_dict = db['JobPositions']
+    jobpositions_dict.pop(id)
+
+    db['JobPositions'] = jobpositions_dict
+    db.close()
+
+    return redirect(url_for('retrieve_jobpositions'))
 # end of hiring
+
 
 if __name__ == '__main__':
     app.run(debug=True)

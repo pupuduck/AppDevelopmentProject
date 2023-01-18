@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Dr. Donuts{% endblock %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Update Resume</h1>
+<link rel="stylesheet" href="dragdrop.css">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<form method="POST" action="">
+  <div class="form-group">
+    {{ render_field(form.first_name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.last_name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.email, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.address, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.contactno, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.sgorpr, class="form-control" ,style="list-style:none;") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.citizenship, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.preferredjob, class="form-control") }}
+  </div>
+  <div class="form-group files">
+    {{ render_field(form.uploadfile, class="form-control") }}
+  </div>
+  <input type="submit" value="Submit"  class="btn btn-primary"/>
+</form>
+{% block content %}
+{% endblock %}

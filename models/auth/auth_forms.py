@@ -1,4 +1,4 @@
-from wtforms import StringField, EmailField, PasswordField, SubmitField, IntegerField, DateField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, IntegerField, DateField, FileField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from flask_wtf import FlaskForm
 
@@ -23,6 +23,7 @@ class UpdateProfileForm(FlaskForm):
     email = EmailField('Email', validators=[Email(), DataRequired()])
     phone = IntegerField('Phone number', validators=[Length(8)])
     birthday = DateField('Birthday')
+    image = FileField()
     submit1 = SubmitField('Save Changes')
 
 

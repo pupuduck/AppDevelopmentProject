@@ -11,6 +11,7 @@ class User(UserMixin):
         self.__phone = None
         self.__location = None
         self.__role = role
+        self.__image = None
 
     def set_username(self, username):
         self.__username = username
@@ -36,6 +37,9 @@ class User(UserMixin):
     def set_role(self, role):
         self.__role = role
 
+    def set_image(self, image):
+        self.__image = image
+
     def get_username(self):
         return self.__username
 
@@ -59,3 +63,6 @@ class User(UserMixin):
 
     def get_role(self):
         return self.__role
+
+    def get_image(self):
+        return self.__image

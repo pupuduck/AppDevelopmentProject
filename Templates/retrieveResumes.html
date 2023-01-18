@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Dr. Donuts{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Resumes</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no applicants.</p>
+  {% elif count == 1 %}
+  <p>There is 1 applicant.</p>
+  {% else %}
+  <p>There are {{ count }} applicants.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Applicant ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Citizenship</th>
+        <th>Contact No.</th>
+        <th>Preferred Job Position</th>
+        <th>Uploaded Resume File</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for resumes in resumes_list %}
+     <tr>
+        <td>{{ resumes.get_resumes_id() }}</td>
+        <td>{{ resumes.get_first_name() }}</td>
+        <td>{{ resumes.get_last_name() }}</td>
+        <td>{{ resumes.get_email() }}</td>
+        <td>{{ resumes.get_address() }}</td>
+        <td>{{ resumes.get_citizenship() }}</td>
+        <td>{{ resumes.get_contactno() }}</td>
+        <td>{{ resumes.get_preferredjob() }}</td>
+        <td>{{ resumes.get_uploadfile() }}</td>
+        <td><a href="/updateResumes/{{resumes.get_resumes_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_resumes', id=resumes.get_resumes_id())}}" method="POST">
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{resumes.get_resumes_id()}}">
+  Delete
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal_{{resumes.get_resumes_id()}}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Confirmation</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to delete {{resumes.get_first_name()}} {{resumes.get_last_name()}}?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <input type="submit" value="Delete" class="btn btn-danger">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+          </form>
+        </td>
+     </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
