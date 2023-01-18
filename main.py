@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
-from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm
+from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm, UpdatePasswordForm
 from models.auth.user import User
 from models.cust.contactMessage import Message
 from models.cust.contactForm import CreateMessageForm
@@ -63,6 +63,7 @@ def login():
             if user.get_password() != password:
                 error = 'Password is incorrect'
             else:
+                flash(f'Successfully logged in. Welcome back {user.get_username()}!', 'success')
                 login_user(user)
                 print(f"User {current_user.get_id()} logged in")
                 return redirect(url_for('home'))
@@ -105,6 +106,7 @@ def register():
                 cust_dict[c1.get_id()] = c1
                 db['customer'] = cust_dict
                 db.close()
+                flash(f'Account successfully created. Welcome {c1.get_username()}')
                 print(f"Account created, id = {id}")
                 return redirect(url_for('login'))
         except IOError:
@@ -116,8 +118,11 @@ def register():
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
+    update_password_form = UpdatePasswordForm()
     update_form = UpdateProfileForm()
-    if request.method == "POST":
+    submit1 = update_form.submit1.data
+    submit2 = update_password_form.submit2.data
+    if request.method == "POST" and submit1:
         db = shelve.open('DB/Customer/customer')
         user_dict = {}
         user_dict = db['customer']
@@ -130,6 +135,7 @@ def update():
                 users.set_birthday(update_form.birthday.data)
                 db['customer'] = user_dict
                 db.close()
+                flash('Profile successfully updated')
                 print(f"User {current_user.get_id()} profile updated")
     else:
         update_form.username.data = current_user.get_username()
@@ -138,7 +144,25 @@ def update():
         update_form.phone.data = current_user.get_phone()
         update_form.birthday.data = current_user.get_birthday()
 
-    return render_template('update.html', form=update_form)
+    if request.method == "POST" and submit2:
+        password1 = update_password_form.password1.data
+        password2 = update_password_form.password2.data
+        error = None
+        db = shelve.open('DB/Customer/customer')
+        user_dict = {}
+        user_dict = db['customer']
+        for users in user_dict.values():
+            if users.get_id() == current_user.get_id():
+                if current_user.get_password() == password1:
+                    users.set_password(password2)
+                else:
+                    error = 'Current password is wrong'
+        db['customer'] = user_dict
+        db.close()
+        flash('Password successfully changed!')
+        print(f'Password changed from {password1} to {password2}')
+
+    return render_template('update.html', update_form=update_form, update_password_form=update_password_form)
 
 
 @app.route('/logout', methods=['GET'])
@@ -198,7 +222,6 @@ def createStaff():
         print("Error IO Error")
     except Exception as ex:
         print(f"unknown error occurred as {ex}")
-
 
 # end of account management
 # start customer support
