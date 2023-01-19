@@ -29,7 +29,7 @@ class CreateJobPositionsForm(Form):
     jobname = StringField('What is the name of the job?', [validators.Length(min=1, max=150), validators.DataRequired()])
     jobavailability = SelectField('Is there availability for the job now?', choices=[('Available', 'Available'), ('Not Available', 'Not Available')],
                               default='Available')
-    jobrequirements = StringField('What are the requirements of the job?', [ validators.DataRequired()])
-    jobresponsibility = StringField('What are the responsibilities of the job?', [ validators.DataRequired()])
+    jobrequirements = TextAreaField('What are the requirements of the job?', [ validators.DataRequired()])
+    jobresponsibility = TextAreaField('What are the responsibilities of the job?', [ validators.DataRequired()])
     jobsalary = StringField('What is the salary of the job', [ validators.DataRequired()])
 

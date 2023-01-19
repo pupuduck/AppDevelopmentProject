@@ -379,6 +379,19 @@ def retrieve_jobpositions():
         jobpositions_list.append(jobpositions)
 
     return render_template('retrieveJobPositions.html', count=len(jobpositions_list), jobpositions_list=jobpositions_list)
+@app.route('/displayJobPositions/')
+def display_jobpositions():
+    jobpositions_dict = {}
+    db = shelve.open('DB/Hiring/jobPositions')
+    jobpositions_dict = db['JobPositions']
+    db.close()
+
+    jobpositions_list = []
+    for key in jobpositions_dict:
+        jobpositions = jobpositions_dict.get(key)
+        jobpositions_list.append(jobpositions)
+
+    return render_template('displayJobPositions.html',count=len(jobpositions_list), jobpositions_list=jobpositions_list)
 
 @app.route('/updateResumes/<int:id>/', methods=['GET', 'POST'])
 def update_resumes(id):

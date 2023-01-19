@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dr. Donuts{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Job Positions Available</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no jobs available.</p>
+  {% elif count == 1 %}
+  <p>There is 1 job available.</p>
+  {% else %}
+  <p>There are {{ count }} jobs available.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Job ID</th>
+        <th>Job Name</th>
+        <th>Job Availability</th>
+        <th>Job Requirements</th>
+        <th>Job Responsibility</th>
+        <th>Job Salary</th>
+
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for jobpositions in jobpositions_list %}
+        <tr>
+          <td>{{ jobpositions.get_id() }}</td>
+          <td>{{ jobpositions.get_jobname() }}</td>
+          <td>{{ jobpositions.get_jobavailability() }}</td>
+          <td>{{ jobpositions.get_jobrequirements() }}</td>
+          <td>{{ jobpositions.get_jobresponsibility() }}</td>
+          <td>${{ jobpositions.get_jobsalary() }}</td>
+
+
+
+          <td><a href="/createResumes" class="btn btn-warning">Submit Resume</a></td>
+        <td>
+        </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
