@@ -1,24 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Dr. Donuts{% endblock %}
-<link rel="stylesheet" href="../static/css/contactUs">
 {% block content %}
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
 	<link rel="stylesheet" href="../static/css/contactUs.css">
-
 	<body>
-				{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <span>{{ message }}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		{% for message in messages %}
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<span>{{ message }}</span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+		{% endfor %}
+	  {% endif %}
+	{% endwith %}
 
 	<section class="ftco-section">
 		<div class="container">
