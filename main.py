@@ -203,6 +203,10 @@ def delete():
     return render_template('home.html')
 
 
+@app.route('/admin', methods=["GET"])
+def adminPage():
+    return render_template('admin.html')
+
 def createStaff():
     username = input("Enter name: ")
     email = input("Enter email: ")
