@@ -207,6 +207,7 @@ def delete():
 def adminPage():
     return render_template('admin.html')
 
+
 def createStaff():
     username = input("Enter name: ")
     email = input("Enter email: ")

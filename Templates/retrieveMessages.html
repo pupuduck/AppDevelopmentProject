@@ -2,6 +2,17 @@
 {% block title %}Dr. Donuts{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/sidebar.css">
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="/retrieveMessages">View messages</a>
+  <a href="/retrieveResumes">View job applications</a>
+  <a href="/retrieveJobPositions">View job positions</a>
+  <a href="#">View users</a>
+</div>
+
+<div id="main">
+  <button class="openbtn" onclick="openNav()">&#9776;</button>
 <h1 class="display-4">Retrieve Messages</h1>
 <div>
   {% if count == 0 %}
@@ -12,8 +23,8 @@
   <p>There are {{ count }} messages.</p>
   {% endif %}
 </div>
-<div>
-  <table class="table table-striped">
+<div class="container-sm d-flex justify-content-center" style="padding-bottom: 3rem">
+  <table class="table table-striped w-75 p-3">
     <thead>
       <tr>
         <th>Name</th>
@@ -31,13 +42,13 @@
         <td>{{ message.get_email() }}</td>
         <td>{{ message.get_subject() }}</td>
         <td>{{ message.get_message() }}</td>
-         <td><a href="/updateUser/{{message.get_message_id()}}" class="btn btn-warning">Update</a></td>
+         <td><a href="/updateUser/{{message.get_message_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
           <form action="{{url_for('delete_message', id=message.get_message_id())}}" method="POST">
 <!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{message.get_subject()}} ?');">-->
 <!-- Button to Open the Modal -->
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{message.get_message_id()}}">
-  Delete
+  <i class="fa fa-trash"></i>
 </button>
 
 <!-- The Modal -->
@@ -72,4 +83,9 @@
     </tbody>
   </table>
 </div>
+</div>
+<script src="../static/javascript/sidebar.js"></script>
+
+<!--</div>-->
+
 {% endblock %}
