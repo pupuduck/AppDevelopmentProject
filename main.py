@@ -234,6 +234,35 @@ def createStaff():
         print(f"unknown error occurred as {ex}")
 
 
+@app.route('/retrieveUsers')
+def retrieve_users():
+    users_dict = {}
+    db = shelve.open('DB/Customer/customer')
+    users_dict = db['customer']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
+
+    return render_template('retrieveUsers.html', count=len(users_list), users_list=users_list)
+
+
+@app.route('/deleteUsers/<int:id>', methods=['POST'])
+def delete_user(id):
+    users_dict = {}
+    db = shelve.open('DB/Customer/customer')
+    users_dict = db['customer']
+
+    users_dict.pop(id)
+    print("deleted")
+    db['customer'] = users_dict
+    db.close()
+
+    return redirect(url_for('retrieve_users'))
+
+
 # end of account management
 # start customer support
 
@@ -343,7 +372,6 @@ def create_jobpositions():
                                     create_jobpositions_form.jobrequirements.data,
                                     create_jobpositions_form.jobresponsibility.data,
                                     create_jobpositions_form.jobsalary.data)
-        #        customers_dict[customer.get_customer_id()] = customer
         for key in jobpositions_dict:
             if key == jobpositions.get_id():
                 jobpositions.set_id(int(jobpositions.get_id() + 1))
@@ -384,6 +412,8 @@ def retrieve_jobpositions():
         jobpositions_list.append(jobpositions)
 
     return render_template('retrieveJobPositions.html', count=len(jobpositions_list), jobpositions_list=jobpositions_list)
+
+
 @app.route('/displayJobPositions/')
 def display_jobpositions():
     jobpositions_dict = {}
@@ -397,6 +427,7 @@ def display_jobpositions():
         jobpositions_list.append(jobpositions)
 
     return render_template('displayJobPositions.html',count=len(jobpositions_list), jobpositions_list=jobpositions_list)
+
 
 @app.route('/updateResumes/<int:id>/', methods=['GET', 'POST'])
 def update_resumes(id):

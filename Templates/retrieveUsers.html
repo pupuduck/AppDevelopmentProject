@@ -13,46 +13,45 @@
 
 <div id="main">
   <button class="openbtn" onclick="openNav()">&#9776;</button>
-<h1 class="display-4">Retrieve Messages</h1>
+<h1 class="display-4">Retrieve Users</h1>
 <div>
   {% if count == 0 %}
-  <p>There are no messages.</p>
+  <p>There are no user.</p>
   {% elif count == 1 %}
-  <p>There is 1 messages.</p>
+  <p>There is 1 user.</p>
   {% else %}
-  <p>There are {{ count }} messages.</p>
+  <p>There are {{ count }} users.</p>
   {% endif %}
 </div>
 <div class="container-sm d-flex justify-content-center" style="padding-bottom: 3rem">
   <table class="table table-striped w-75 p-3">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Username</th>
         <th>Email</th>
-        <th>Subject</th>
-        <th>Message</th>
-        <th></th>
-        <th></th>
+        <th>Id</th>
+        <th>Password</th>
+        <th>Role</th>
       </tr>
     </thead>
     <tbody>
-    {% for message in message_list %}
+    {% for user in users_list %}
      <tr>
-        <td>{{ message.get_name() }}</td>
-        <td>{{ message.get_email() }}</td>
-        <td>{{ message.get_subject() }}</td>
-        <td>{{ message.get_message() }}</td>
-         <td><a href="/updateUser/{{message.get_message_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
+        <td>{{ user.get_username() }}</td>
+        <td>{{ user.get_email() }}</td>
+        <td>{{ user.get_id() }}</td>
+        <td>{{ user.get_password() }}</td>
+        <td>{{ user.get_role() }}</td>
+        <td><a href="/updateUsers/{{user.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
-          <form action="{{url_for('delete_message', id=message.get_message_id())}}" method="POST">
-<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{message.get_subject()}} ?');">-->
+          <form action="{{url_for('delete_user', id=user.get_id())}}" method="POST">
 <!-- Button to Open the Modal -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{message.get_message_id()}}">
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{user.get_id()}}">
   <i class="fa fa-trash"></i>
 </button>
 
 <!-- The Modal -->
-<div class="modal" id="myModal_{{message.get_message_id()}}">
+<div class="modal" id="myModal_{{user.get_id()}}">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -64,7 +63,7 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        Are you sure you want to delete {{message.get_subject()}}?
+        Are you sure you want to delete {{user.get_id()}} account?
       </div>
 
       <!-- Modal footer -->
@@ -85,7 +84,5 @@
 </div>
 </div>
 <script src="../static/javascript/sidebar.js"></script>
-
-<!--</div>-->
 
 {% endblock %}

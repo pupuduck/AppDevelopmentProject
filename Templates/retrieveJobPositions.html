@@ -9,7 +9,7 @@
   <a href="/retrieveMessages">View messages</a>
   <a href="/retrieveResumes">View job applications</a>
   <a href="/retrieveJobPositions">View job positions</a>
-  <a href="#">View users</a>
+  <a href="/retrieveUsers">View users</a>
 </div>
 
 <div id="main">
@@ -24,8 +24,8 @@
   <p>There are {{ count }} jobs.</p>
   {% endif %}
 </div>
-<div class="container-fluid">
-  <table class="table table-striped w-75 p-3">
+<div class="container-sm d-flex justify-content-center">
+  <table class="table table-striped w-75 p-3 table-responsive">
     <thead>
       <tr>
         <th>Job ID</th>
