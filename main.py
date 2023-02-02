@@ -7,14 +7,17 @@ from models.cust.contactForm import CreateMessageForm
 from models.hiring.hiringForm import CreateResumesForm, CreateJobPositionsForm
 from models.hiring.resume import Resumes
 from models.hiring.jobPositions import JobPositions
+from PIL import Image
+from werkzeug.utils import secure_filename
 import shelve
 import calendar
 import time
+import os
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "xxkxcZKH2TxsSw7bew8D9gLpCaa3YYnn"
-
+app.config["IMAGE_UPLOADS"] = 'static/profileImages'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -126,6 +129,9 @@ def update():
     submit1 = update_form.submit1.data
     submit2 = update_password_form.submit2.data
     if request.method == "POST" and submit1:
+        image = request.files['file']
+        filename = secure_filename(image.filename)
+        print(request.files)
         db = shelve.open('DB/Customer/customer')
         user_dict = {}
         user_dict = db['customer']
@@ -141,6 +147,7 @@ def update():
                 db.close()
                 flash('Profile successfully updated')
                 print(f"User {current_user.get_id()} profile updated")
+
     else:
         update_form.username.data = current_user.get_username()
         update_form.email.data = current_user.get_email()
@@ -213,7 +220,7 @@ def createStaff():
     email = input("Enter email: ")
     password = "AdminPassword123"
     current_GMT = time.gmtime()
-    id = int(calendar.timegm(current_GMT))
+    id = (calendar.timegm(current_GMT))
     role = "Admin"
     cust_dict = {}
     try:
@@ -252,13 +259,20 @@ def retrieve_users():
 @app.route('/deleteUsers/<int:id>', methods=['POST'])
 def delete_user(id):
     users_dict = {}
-    db = shelve.open('DB/Customer/customer')
-    users_dict = db['customer']
+    try:
+        db = shelve.open('DB/Customer/customer')
+        users_dict = db['customer']
+        if 'customer' in db:
+            users_dict = db['customer']
+        else:
+            db['customer'] = users_dict
 
-    users_dict.pop(id)
-    print("deleted")
-    db['customer'] = users_dict
-    db.close()
+        users_dict.pop(str(id))
+
+        db['customer'] = users_dict
+        db.close()
+    except IOError:
+        print('Error IO error')
 
     return redirect(url_for('retrieve_users'))
 
@@ -533,6 +547,22 @@ def delete_jobpositions(id):
     db.close()
 
     return redirect(url_for('retrieve_jobpositions'))
+
+
+@app.route('/viewJobs', methods=['GET', 'POST'])
+def view_jobs():
+    jobs_dict = {}
+    db = shelve.open('DB/Hiring/jobPositions')
+    jobs_dict = db['JobPositions']
+    db.close()
+
+    jobs_list = []
+    for key in jobs_dict:
+        jobs = jobs_dict.get(key)
+        jobs_list.append(jobs)
+
+    return render_template('viewJobs.html', count=len(jobs_list),
+                           jobs_list=jobs_list)
 # end of hiring
 
 

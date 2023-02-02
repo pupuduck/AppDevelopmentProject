@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Dr. Donuts{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="../static/css/viewJobs.css">
+<div class="container-fluid">
+    <div class="row">
+        {% for jobs in jobs_list %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card">
+                <img src="../static/images/donut_lead.jpg" alt="" style="width:300px, height: 300px" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="cardtitle">{{ jobs.get_jobname() }}</h5>
+                </div>
+                <div class="card-text">Availability: {{ jobs.get_jobavailability() }}</div>
+                <div class="card-text">Responsibility: {{ jobs.get_jobresponsibility() }}</div>
+                <div class="card-text">Salary: {{ jobs.get_jobsalary() }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
