@@ -8,16 +8,14 @@ from models.hiring.hiringForm import CreateResumesForm, CreateJobPositionsForm
 from models.hiring.resume import Resumes
 from models.hiring.jobPositions import JobPositions
 from PIL import Image
-from werkzeug.utils import secure_filename
+import secrets
 import shelve
 import calendar
 import time
-import os
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "xxkxcZKH2TxsSw7bew8D9gLpCaa3YYnn"
-app.config["IMAGE_UPLOADS"] = 'static/profileImages'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -129,9 +127,6 @@ def update():
     submit1 = update_form.submit1.data
     submit2 = update_password_form.submit2.data
     if request.method == "POST" and submit1:
-        image = request.files['file']
-        filename = secure_filename(image.filename)
-        print(request.files)
         db = shelve.open('DB/Customer/customer')
         user_dict = {}
         user_dict = db['customer']
@@ -142,7 +137,12 @@ def update():
                 users.set_location(update_form.location.data)
                 users.set_phone(update_form.phone.data)
                 users.set_birthday(update_form.birthday.data)
-                users.set_image(update_form.image.data)
+
+                image = Image.open(update_form.image.data)
+                random_hex = secrets.token_hex(8)
+                random_hex = "static/profileImage/" + random_hex + ".jpg"
+                image.save(random_hex)
+                users.set_image(random_hex)
                 db['customer'] = user_dict
                 db.close()
                 flash('Profile successfully updated')
