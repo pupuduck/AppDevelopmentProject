@@ -147,6 +147,7 @@ def update():
                 db.close()
                 flash('Profile successfully updated')
                 print(f"User {current_user.get_id()} profile updated")
+                return redirect(url_for('update'))
 
     else:
         update_form.username.data = current_user.get_username()
