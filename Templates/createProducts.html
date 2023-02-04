@@ -2,32 +2,50 @@
 {% block title %}Dr Donut{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/sidebar.css">
+<link rel="stylesheet" href="../static/css/CRUD.css">
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <h2 class="display-5 text-center">Adminstrative</h2>
+  <a href="/retrieveMessages">View messages</a>
+  <a href="/retrieveResumes">View job applications</a>
+  <a href="/retrieveJobPositions">View job positions</a>
+  <a href="/retrieveUsers">View users</a>
+  <a href="/createProducts">Create Products</a>
+</div>
 
-<h1 class="display-4">Create Products</h1>
+<div id="main">
+  <button class="openbtn" onclick="openNav()">&#9776;</button>
+  <div class="container-fluid w-75">
+    <h1 class="display-4">Create Products</h1>
 
-<form method="post" enctype="multipart/form-data">
-  <div class="form-group">
-    {{ form.Name.label( class="form-label")}}
-    {{ form.Name(class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ form.Rating.label( class="form-label")}}
-    {{ form.Rating(class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ form.Description.label( class="form-label")}}
-    {{ form.Description(class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ form.Price.label( class="form-label")}}
-    {{ form.Price(class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ form.Image.label( class="form-label") }}
-    {{ form.Image(class="form-control") }}
-  </div>
-    {{form.Submit(class="btn btn-primary")}}
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        {{ form.Name.label( class="form-label")}}
+        {{ form.Name(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.Rating.label( class="form-label")}}
+        {{ form.Rating(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.Description.label( class="form-label")}}
+        {{ form.Description(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.Price.label( class="form-label")}}
+        {{ form.Price(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.Image.label( class="form-label") }}
+        {{ form.Image(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{form.Submit(class="btn btn-primary")}}
+      </div>
 
-
-</form>
+    </form>
+  </div>
+</div>
+<script src="../static/javascript/sidebar.js"></script>
 {% endblock %}

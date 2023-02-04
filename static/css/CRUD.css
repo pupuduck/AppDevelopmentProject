@@ -2,6 +2,15 @@
   --font-default: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-primary: "Bebas";
   --font-secondary: "Inter", sans-serif;
+  --color-primary: pink;
 }
 .display-4{
-    font-family: var(--font-secondary);}
+    font-family: var(--font-secondary);
+    color: var(--color-primary)}
+
+.form-group{
+    padding-top: 10px
+}
+.container-fluid{
+    padding-bottom: 3rem
+}
