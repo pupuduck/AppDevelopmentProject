@@ -7,6 +7,8 @@ from models.cust.contactForm import CreateMessageForm
 from models.hiring.hiringForm import CreateResumesForm, CreateJobPositionsForm
 from models.hiring.resume import Resumes
 from models.hiring.jobPositions import JobPositions
+from models.products.productForm import CreateProductForm
+from models.products.product import Product
 from PIL import Image
 import secrets
 import shelve
@@ -39,11 +41,6 @@ def load_user(user_id):
 @app.route('/home')
 def home():
     return render_template('home.html')
-
-
-@app.route('/products')
-def products():
-    return render_template('products.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -565,6 +562,53 @@ def view_jobs():
     return render_template('viewJobs.html', count=len(jobs_list),
                            jobs_list=jobs_list)
 # end of hiring
+# start of transaction processing
+
+
+@app.route('/createProducts', methods=['POST', 'GET'])
+def create_products():
+    create_product_form = CreateProductForm()
+    print(create_product_form.Image.data)
+    if request.method == 'POST':
+        products_dict = {}
+        print(create_product_form.Image.data)
+        image = Image.open(create_product_form.Image.data)
+        random_hex = secrets.token_hex(8)
+        random_hex = "static/donutImages/" + random_hex + ".png"
+        image.save(random_hex)
+        try:
+            db = shelve.open('DB/Product/product')
+            if 'Products' in db:
+                products_dict = db['Products']
+            else:
+                db['Products'] = products_dict
+
+            product = Product(create_product_form.Name.data, create_product_form.Rating.data,
+                              create_product_form.Description.data, round(create_product_form.Price.data, 2), random_hex)
+            products_dict[product.get_product_id()] = product
+            db['Products'] = products_dict
+            db.close()
+        except IOError:
+            print("IOError")
+        except Exception as ex:
+            print(f"Exception Error as {ex}")
+
+    return render_template('createProducts.html', form=create_product_form)
+
+
+@app.route('/products')
+def retrieve_product():
+    products_dict = {}
+    db = shelve.open('DB/Product/product', 'r')
+    products_dict = db['Products']
+    db.close()
+
+    products_list = []
+    for key in products_dict:
+        product = products_dict.get(key)
+        products_list.append(product)
+
+    return render_template('products.html', count=len(products_list), products_list=products_list)
 
 
 if __name__ == '__main__':

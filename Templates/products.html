@@ -2,41 +2,36 @@
 {% block title %}Dr. Donuts{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="../static/css/viewJobs.css">
-<div class="container-fluid">
+<link rel="stylesheet" href="../static/css/products.css">
+<h1 class="heading text-center">
+        <span>d</span>
+        <span>o</span>
+        <span>n</span>
+        <span>u</span>
+		<span>t</span>
+        <span>s</span>
+    </h1>
+<div class="container-fluid cardbox">
+
     <div class="row">
+
+        {% for products in products_list %}
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card">
-                <img src="../static/images/donut_lead.jpg" alt="" style="width:300px, height: 300px" class="card-img-top">
+                <img src="{{ products.get_image() }}" alt="" style="width:300px, height: 300px" class="card-img-top">
                 <div class="card-body">
-                    <h5 class="cardtitle">Test Test</h5>
+                    <h3 class="cardtitle">{{ products.get_name() }}</h3>
+                    <div class="card-text">{{ products.get_description() }}</div>
+                    <div class="card-text">Price: ${{ products.get_price() }}</div>
+                    <div class="card-text">Rating: {{ products.get_rating() }}/5</div>
+                    <div class="card-text">
+                        <a href="login.html" class="btn">Add to cart</a>
+                    </div>
                 </div>
+
             </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card">
-                <img src="../static/images/donut_lead.jpg" alt="" style="width:300px, height: 300px" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="cardtitle">Test Test</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card">
-                <img src="../static/images/donut_lead.jpg" alt="" style="width:300px, height: 300px" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="cardtitle">Test Test</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card">
-                <img src="../static/images/donut_lead.jpg" alt="" style="width:300px, height: 300px" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="cardtitle">Test Test</h5>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

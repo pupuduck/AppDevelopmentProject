@@ -1,4 +1,56 @@
-main{
-    min-height: calc(100vh - 146px - 102.6px);
-
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+*{
+  font-family: 'Nunito', sans-serif;
+  margin:0; padding:0;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  outline: none; border:none;
+  text-decoration: none;
+  transition: all .2s linear;
 }
+:root {
+    --pink: #ffc6ca;
+    --orange: #ffa500;
+    --text-color-1: #444;
+    --text-color-2: #666;
+    --bg-color-1: #fff;
+    --bg-color-2: #eee;
+    --box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.1);
+    --hover: white;
+}
+.heading span {
+    font-size: 3rem;
+    color: var(--pink);
+}
+.container-fluid{
+    padding: 2rem 5%;
+    padding-bottom: 5rem
+}
+.cardbox{
+    padding-top: 0rem;
+}
+.col-12{
+    padding: 2rem;
+}
+.card{
+
+    min-height: 35rem;
+}
+.card-body{
+    background-color: #eee;
+    font-family: Nunito;
+}
+.btn {
+    display: inline-block;
+    margin-top: 1rem;
+    background: var(--pink);
+    color: #fff;
+    padding: 0.3rem 0.8rem;
+    border: 0.2rem solid var(--pink);
+    cursor: pointer;
+}
+.btn:hover{
+    background: var(--hover)
+}
+
+
