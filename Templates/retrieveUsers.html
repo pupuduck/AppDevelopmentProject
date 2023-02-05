@@ -39,6 +39,7 @@
         <th>Id</th>
         <th>Password</th>
         <th>Role</th>
+        <th>Status</th>
         <th>Actions</th>
 
       </tr>
@@ -51,6 +52,15 @@
         <td>{{ user.get_id() }}</td>
         <td>{{ user.get_password() }}</td>
         <td>{{ user.get_role() }}</td>
+            <td>
+                {% if user.get_status() == 'Active' %}
+                <i class="fa fa-circle" style="color: #1fd655"></i>
+                {% elif user.get_status() == 'Suspended' %}
+                <i class="fa fa-circle" style="color: red"></i>
+                {% endif %}
+                {{ user.get_status() }}
+
+            </td>
         <td><a href="/updateUsers/{{user.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
           <form action="{{url_for('delete_user', id=user.get_id())}}" method="POST">

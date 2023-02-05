@@ -35,4 +35,6 @@ a.navbar-brand img {
 .nav-link {
   font-size: 1.2em;
 }
-
+.container-fluid{
+    padding-bottom: 2em;
+}

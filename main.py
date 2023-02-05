@@ -56,7 +56,7 @@ def login():
         db.close()
         user_list = []
         for user in user_dict.values():
-            if username == user.get_username():
+            if username == user.get_username() and user.get_status() == 'Active':
                 user_list.append(user)
             else:
                 error = "Username does not exist"
@@ -103,7 +103,7 @@ def register():
             elif password != password1:
                 error = "Passwords do not match"
             else:
-                c1 = User(username, email, password, id, 'Customer')
+                c1 = User(username, email, password, id, 'Customer', 'Active')
                 cust_dict[c1.get_id()] = c1
                 db['customer'] = cust_dict
                 db.close()
@@ -183,7 +183,7 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route('/delete', methods=['GET'])
+@app.route('/delete', methods=['GET', 'POST'])
 @login_required
 def delete():
     try:
@@ -195,7 +195,9 @@ def delete():
         else:
             db['customer'] = user_dict
         print(f"User {current_user.get_id()} account deleted")
-        user_dict.pop(current_user.get_id(), None)
+        for user in user_dict.values():
+            if user.get_id() == current_user.get_id():
+                user.set_status('Suspended')
         logout()
 
         db['customer'] = user_dict
@@ -228,7 +230,7 @@ def createStaff():
         else:
             db['customer'] = cust_dict
 
-        Admin = User(username, email, password, id, role)
+        Admin = User(username, email, password, id, role, 'Active')
         cust_dict[Admin.get_id()] = Admin
         db['customer'] = cust_dict
         db.close()
