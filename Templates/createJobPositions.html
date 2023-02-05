@@ -1,28 +1,56 @@
 {% extends "base.html" %}
-{% block title %}Dr. Donuts{% endblock %}
+{% block title %}Dr Donut{% endblock %}
 
 {% block content %}
-{% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="../static/css/sidebar.css">
+<link rel="stylesheet" href="../static/css/CRUD.css">
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <h2 class="display-5 text-center">Adminstrative</h2>
+  <a href="/retrieveMessages">View messages</a>
+  <a href="/retrieveResumes">View job applications</a>
+  <a href="/retrieveJobPositions">View job positions</a>
+  <a href="/createJobPositions">Create Job positions</a>
+  <a href="/retrieveUsers">View users</a>
+  <a href="/createProducts">Create Products</a>
+</div>
 
-<h1 class="display-4">Create Job Positions</h1>
+<div id="main">
+  <button class="openbtn" onclick="openNav()">&#9776;</button>
+  <div class="container-fluid w-75">
+    <h1 class="display-4">Create Products</h1>
 
-<form method="POST" action="">
-  <div class="form-group">
-    {{ render_field(form.jobname, class="form-control") }}
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        {{ form.job_name.label( class="form-label")}}
+        {{ form.job_name(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.job_availability.label( class="form-label")}}
+        {{ form.job_availability(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.job_requirements.label( class="form-label")}}
+        {{ form.job_requirements(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.job_responsibility.label( class="form-label")}}
+        {{ form.job_responsibility(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.job_salary.label( class="form-label")}}
+        {{ form.job_salary(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.job_image.label( class="form-label") }}
+        {{ form.job_image(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{form.Submit(class="btn btn-primary")}}
+      </div>
+
+    </form>
   </div>
-  <div class="form-group">
-    {{ render_field(form.jobavailability, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.jobrequirements, class="form-control") }}
-  </div>
-    <div class="form-group">
-    {{ render_field(form.jobresponsibility, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.jobsalary, class="form-control") }}
-  </div>
-  <br>
-  <input type="submit" value="Submit" class="btn btn-primary"/>
-</form>
+</div>
+<script src="../static/javascript/sidebar.js"></script>
 {% endblock %}

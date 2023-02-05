@@ -7,9 +7,10 @@
 <link rel="stylesheet" href="../static/css/CRUD.css">
 <div id="mySidebar" class="sidebar">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <h2 class="display-5 text-center">Adminstrative</h2>
+  <h2 class="display-5 text-center">Administrative</h2>
   <a href="/retrieveMessages">View messages</a>
   <a href="/retrieveResumes">View job applications</a>
+  <a href="/createJobPositions">Create Job positions</a>
   <a href="/retrieveJobPositions">View job positions</a>
   <a href="/retrieveUsers">View users</a>
   <a href="/createProducts">Create Products</a>
@@ -44,28 +45,28 @@
       </tr>
     </thead>
     <tbody>
-      {% for jobpositions in jobpositions_list %}
+      {% for job_positions in job_positions_list %}
         <tr>
-          <td>{{ jobpositions.get_id() }}</td>
-          <td>{{ jobpositions.get_jobname() }}</td>
-          <td>{{ jobpositions.get_jobavailability() }}</td>
-          <td>{{ jobpositions.get_jobrequirements() }}</td>
-          <td>{{ jobpositions.get_jobresponsibility() }}</td>
-          <td>${{ jobpositions.get_jobsalary() }}</td>
+          <td>{{ job_positions.get_id() }}</td>
+          <td>{{ job_positions.get_job_name() }}</td>
+          <td>{{ job_positions.get_job_availability() }}</td>
+          <td>{{ job_positions.get_job_requirements() }}</td>
+          <td>{{ job_positions.get_job_responsibility() }}</td>
+          <td>${{ job_positions.get_job_salary() }}</td>
 
 
 
-          <td><a href="/updateJobPositions/{{jobpositions.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i
+          <td><a href="/updateJobPositions/{{job_positions.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i
       >  </a></td>
           <td>
-            <form action="{{url_for('delete_jobpositions', id=jobpositions.get_id())}}" method="POST">
+            <form action="{{url_for('delete_jobpositions', id=job_positions.get_id())}}" method="POST">
 <!-- Button to Open the Modal -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{jobpositions.get_id()}}">
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{job_positions.get_id()}}">
   <i class="fa fa-trash"></i>
 </button>
 
 <!-- The Modal -->
-<div class="modal" id="myModal_{{jobpositions.get_id()}}">
+<div class="modal" id="myModal_{{job_positions.get_id()}}">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -77,7 +78,7 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        Are you sure you want to delete {{jobpositions.get_jobname()}} ?
+        Are you sure you want to delete {{job_positions.get_job_name()}} ?
       </div>
 
       <!-- Modal footer -->

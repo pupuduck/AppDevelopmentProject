@@ -1,3 +1,7 @@
 .container-fluid{
     padding-top: 30px;
     padding-bottom: 30px;}
+
+.col-12{
+    padding: 2rem 6rem
+}

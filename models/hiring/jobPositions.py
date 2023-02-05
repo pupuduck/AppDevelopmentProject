@@ -1,50 +1,57 @@
 class JobPositions:
     count_id = 0
 
-    def __init__(self, jobname, jobavailability, jobrequirements, jobresponsibility, jobsalary):
+    def __init__(self, job_name, job_availability, job_requirements, job_responsibility, job_salary, job_image):
         JobPositions.count_id += 1
         self.__id = JobPositions.count_id
-        self.__jobname = jobname
-        self.__jobavailability = jobavailability
-        self.__jobrequirements = jobrequirements
-        self.__jobresponsibility = jobresponsibility
-        self.__jobsalary = jobsalary
+        self.__job_name = job_name
+        self.__job_availability = job_availability
+        self.__job_requirements = job_requirements
+        self.__job_responsibility = job_responsibility
+        self.__job_salary = job_salary
+        self.__job_image = job_image
 
     # accessor methods
     def get_id(self):
         return self.__id
 
-    def get_jobname(self):
-        return self.__jobname
+    def get_job_name(self):
+        return self.__job_name
 
-    def get_jobavailability(self):
-        return self.__jobavailability
+    def get_job_availability(self):
+        return self.__job_availability
 
-    def get_jobrequirements(self):
-        return self.__jobrequirements
+    def get_job_requirements(self):
+        return self.__job_requirements
 
-    def get_jobresponsibility(self):
-        return self.__jobresponsibility
+    def get_job_responsibility(self):
+        return self.__job_responsibility
 
-    def get_jobsalary(self):
-        return self.__jobsalary
+    def get_job_salary(self):
+        return self.__job_salary
+
+    def get_job_image(self):
+        return self.__job_image
 
     # mutator methods
 
     def set_id(self, id):
         self.__id = id
 
-    def set_jobname(self, jobname):
-        self.__jobname = jobname
+    def set_job_name(self, job_name):
+        self.__job_name = job_name
 
-    def set_jobavailability(self, jobavailability):
-        self.__jobavailability = jobavailability
+    def set_job_availability(self, job_availability):
+        self.__job_availability = job_availability
 
-    def set_jobrequirements(self, jobrequirements):
-        self.__jobrequirements = jobrequirements
+    def set_job_requirements(self, job_requirements):
+        self.__job_requirements = job_requirements
 
-    def set_jobresponsibility(self,jobresponsiblity):
-        self.__jobresponsibility = jobresponsiblity
+    def set_job_responsibility(self, job_responsiblity):
+        self.__job_responsibility = job_responsiblity
 
-    def set_jobsalary(self,jobsalary):
-        self.__jobsalary = jobsalary
+    def set_job_salary(self, job_salary):
+        self.__job_salary = job_salary
+
+    def set_job_image(self, job_image):
+        self.__job_image = job_image

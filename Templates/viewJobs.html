@@ -8,13 +8,13 @@
         {% for jobs in jobs_list %}
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card">
-                <img src="../static/images/donut_lead.jpg" alt="" style="width:300px, height: 300px" class="card-img-top">
+                <img src="{{ jobs.get_job_image() }}" alt="" style="width:300px, height: 300px" class="card-img-top">
                 <div class="card-body">
-                    <h5 class="cardtitle">{{ jobs.get_jobname() }}</h5>
+                    <h5 class="cardtitle">{{ jobs.get_job_name() }}</h5>
                 </div>
-                <div class="card-text">Availability: {{ jobs.get_jobavailability() }}</div>
-                <div class="card-text">Responsibility: {{ jobs.get_jobresponsibility() }}</div>
-                <div class="card-text">Salary: {{ jobs.get_jobsalary() }}</div>
+                <div class="card-text">Availability: {{ jobs.get_job_availability() }}</div>
+                <div class="card-text">Responsibility: {{ jobs.get_job_responsibility() }}</div>
+                <div class="card-text">Salary: {{ jobs.get_job_salary() }}</div>
             </div>
         </div>
         {% endfor %}

@@ -368,32 +368,36 @@ def create_resumes():
 
 
 @app.route('/createJobPositions', methods=['GET', 'POST'])
-def create_jobpositions():
-    create_jobpositions_form = CreateJobPositionsForm(request.form)
-    if request.method == 'POST' and create_jobpositions_form.validate():
-        jobpositions_dict = {}
+def create_job_positions():
+    create_job_positions_form = CreateJobPositionsForm()
+    if request.method == 'POST':
+        job_positions_dict = {}
         db = shelve.open('DB/Hiring/jobPositions')
-
+        image = Image.open(create_job_positions_form.job_image.data)
+        random_hex = secrets.token_hex(8)
+        random_hex = "static/jobImages/" + random_hex + ".png"
+        image.save(random_hex)
         try:
-            jobpositions_dict = db['JobPositions']
+            job_positions_dict = db['JobPositions']
         except:
             print("Error in retrieving Job Positions from JobPositions.db.")
 
-        jobpositions = JobPositions(create_jobpositions_form.jobname.data,
-                                    create_jobpositions_form.jobavailability.data,
-                                    create_jobpositions_form.jobrequirements.data,
-                                    create_jobpositions_form.jobresponsibility.data,
-                                    create_jobpositions_form.jobsalary.data)
-        for key in jobpositions_dict:
-            if key == jobpositions.get_id():
-                jobpositions.set_id(int(jobpositions.get_id() + 1))
-        jobpositions_dict[jobpositions.get_id()] = jobpositions
-        db['JobPositions'] = jobpositions_dict
+        job_position = JobPositions(create_job_positions_form.job_name.data,
+                                    create_job_positions_form.job_availability.data,
+                                    create_job_positions_form.job_requirements.data,
+                                    create_job_positions_form.job_responsibility.data,
+                                    create_job_positions_form.job_salary.data,
+                                    random_hex)
+        for key in job_positions_dict:
+            if key == job_position.get_id():
+                job_position.set_id(int(job_position.get_id() + 1))
+        job_positions_dict[job_position.get_id()] = job_position
+        db['JobPositions'] = job_positions_dict
 
         db.close()
 
         return redirect(url_for('retrieve_jobpositions'))
-    return render_template('createJobPositions.html', form=create_jobpositions_form)
+    return render_template('createJobPositions.html', form=create_job_positions_form)
 
 
 @app.route('/retrieveResumes')
@@ -413,32 +417,32 @@ def retrieve_resumes():
 
 @app.route('/retrieveJobPositions')
 def retrieve_jobpositions():
-    jobpositions_dict = {}
+    job_positions_dict = {}
     db = shelve.open('DB/Hiring/jobPositions')
-    jobpositions_dict = db['JobPositions']
+    job_positions_dict = db['JobPositions']
     db.close()
 
-    jobpositions_list = []
-    for key in jobpositions_dict:
-        jobpositions = jobpositions_dict.get(key)
-        jobpositions_list.append(jobpositions)
+    job_positions_list = []
+    for key in job_positions_dict:
+        job_positions = job_positions_dict.get(key)
+        job_positions_list.append(job_positions)
 
-    return render_template('retrieveJobPositions.html', count=len(jobpositions_list), jobpositions_list=jobpositions_list)
+    return render_template('retrieveJobPositions.html', count=len(job_positions_list), job_positions_list=job_positions_list)
 
 
-@app.route('/displayJobPositions/')
+@app.route('/displayJobPositions')
 def display_jobpositions():
-    jobpositions_dict = {}
+    job_positions_dict = {}
     db = shelve.open('DB/Hiring/jobPositions')
-    jobpositions_dict = db['JobPositions']
+    job_positions_dict = db['JobPositions']
     db.close()
 
-    jobpositions_list = []
-    for key in jobpositions_dict:
-        jobpositions = jobpositions_dict.get(key)
-        jobpositions_list.append(jobpositions)
+    job_positions_list = []
+    for key in job_positions_dict:
+        job_positions = job_positions_dict.get(key)
+        job_positions_list.append(job_positions)
 
-    return render_template('displayJobPositions.html',count=len(jobpositions_list), jobpositions_list=jobpositions_list)
+    return render_template('displayJobPositions.html', count=len(job_positions_list), jobpositions_list=job_positions_list)
 
 
 @app.route('/updateResumes/<int:id>/', methods=['GET', 'POST'])
@@ -486,38 +490,38 @@ def update_resumes(id):
 
 @app.route('/updateJobPositions/<int:id>/', methods=['GET', 'POST'])
 def update_jobpositions(id):
-    update_jobpositions_form = CreateJobPositionsForm(request.form)
-    if request.method == 'POST' and update_jobpositions_form.validate():
-        jobpositions_dict = {}
+    update_job_positions_form = CreateJobPositionsForm()
+    if request.method == 'POST':
+        job_positions_dict = {}
         db = shelve.open('DB/Hiring/jobPositions')
-        jobpositions_dict = db['JobPositions']
+        job_positions_dict = db['JobPositions']
 
-        jobpositions = jobpositions_dict.get(id)
-        jobpositions.set_jobname(update_jobpositions_form.jobname.data)
-        jobpositions.set_jobavailability(update_jobpositions_form.jobavailability.data)
-        jobpositions.set_jobrequirements(update_jobpositions_form.jobrequirements.data)
-        jobpositions.set_jobresponsibility(update_jobpositions_form.jobresponsibility.data)
-        jobpositions.set_jobsalary(update_jobpositions_form.jobsalary.data)
+        job_positions = job_positions_dict.get(id)
+        job_positions.set_job_name(update_job_positions_form.job_name.data)
+        job_positions.set_job_availability(update_job_positions_form.job_availability.data)
+        job_positions.set_job_requirements(update_job_positions_form.job_requirements.data)
+        job_positions.set_job_responsibility(update_job_positions_form.job_responsibility.data)
+        job_positions.set_job_salary(update_job_positions_form.job_salary.data)
 
-        db['JobPositions'] = jobpositions_dict
+        db['JobPositions'] = job_positions_dict
         db.close()
 
         return redirect(url_for('retrieve_jobpositions'))
     else:
-        jobpositions_dict = {}
+        job_positions_dict = {}
         db = shelve.open('DB/Hiring/jobPositions')
-        jobpositions_dict = db['JobPositions']
+        job_positions_dict = db['JobPositions']
         db.close()
 
-        jobpositions = jobpositions_dict.get(id)
-        update_jobpositions_form.jobname.data = jobpositions.get_jobname()
-        update_jobpositions_form.jobavailability.data = jobpositions.get_jobavailability()
+        job_positions = job_positions_dict.get(id)
+        update_job_positions_form.job_name.data = job_positions.get_jobname()
+        update_job_positions_form.job_availability.data = job_positions.get_jobavailability()
 
-        update_jobpositions_form.jobrequirements.data = jobpositions.get_jobrequirements()
-        update_jobpositions_form.jobresponsibility.data = jobpositions.get_jobresponsibility()
-        update_jobpositions_form.jobsalary.data = jobpositions.get_jobsalary()
+        update_job_positions_form.job_requirements.data = job_positions.get_jobrequirements()
+        update_job_positions_form.job_responsibility.data = job_positions.get_jobresponsibility()
+        update_job_positions_form.job_salary.data = job_positions.get_jobsalary()
 
-        return render_template('updateJobPositions.html', form=update_jobpositions_form)
+        return render_template('updateJobPositions.html', form=update_job_positions_form)
 
 
 @app.route('/deleteResumes/<int:id>', methods=['POST'])
@@ -571,7 +575,6 @@ def create_products():
     print(create_product_form.Image.data)
     if request.method == 'POST':
         products_dict = {}
-        print(create_product_form.Image.data)
         image = Image.open(create_product_form.Image.data)
         random_hex = secrets.token_hex(8)
         random_hex = "static/donutImages/" + random_hex + ".png"
