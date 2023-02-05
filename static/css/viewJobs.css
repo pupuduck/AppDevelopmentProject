@@ -1,3 +1,22 @@
+*{
+  font-family: 'Nunito', sans-serif;
+  margin:0; padding:0;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  outline: none; border:none;
+  text-decoration: none;
+  transition: all .2s linear;
+}
+:root {
+    --pink: #ffc6ca;
+    --orange: #ffa500;
+    --text-color-1: #444;
+    --text-color-2: #666;
+    --bg-color-1: #fff;
+    --bg-color-2: #eee;
+    --box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.1);
+    --hover: white;
+}
 .container-fluid{
     padding-top: 30px;
     padding-bottom: 30px;}
@@ -5,3 +24,26 @@
 .col-12{
     padding: 2rem 6rem
 }
+.card{
+    width: 300px;
+}
+.card-img-top{
+    height: 250px;
+}
+.card-body{
+    background-color: var(--bg-color-3);
+    color: var(--text-color-2)
+}
+.btn {
+    display: inline-block;
+    margin-top: 1rem;
+    background: var(--pink);
+    color: #fff;
+    padding: 0.3rem 0.8rem;
+    border: 0.2rem solid var(--pink);
+    cursor: pointer;
+}
+.btn:hover{
+    background: var(--hover)
+}
+

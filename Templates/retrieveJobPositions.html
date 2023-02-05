@@ -14,6 +14,7 @@
   <a href="/retrieveJobPositions">View job positions</a>
   <a href="/retrieveUsers">View users</a>
   <a href="/createProducts">Create Products</a>
+    <a href="/retrieveProducts">View Products</a>
 </div>
 
 <div id="main">
@@ -56,8 +57,8 @@
 
 
 
-          <td><a href="/updateJobPositions/{{job_positions.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i
-      >  </a></td>
+          <td><a href="/updateJobPositions/{{job_positions.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil">
+          </i>  </a></td>
           <td>
             <form action="{{url_for('delete_jobpositions', id=job_positions.get_id())}}" method="POST">
 <!-- Button to Open the Modal -->

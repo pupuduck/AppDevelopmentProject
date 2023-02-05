@@ -13,54 +13,50 @@
   <a href="/retrieveJobPositions">View job positions</a>
   <a href="/retrieveUsers">View users</a>
   <a href="/createProducts">Create Products</a>
-      <a href="/retrieveProducts">View Products</a>
+  <a href="/retrieveProducts">View Products</a>
 </div>
 
 
 <div id="main">
   <button class="openbtn" onclick="openNav()">&#9776;</button>
 <div class="container-fluid w-75">
-<h1 class="display-4">Manage Users</h1>
+<h1 class="display-4">Retrieve Products</h1>
 <div>
   {% if count == 0 %}
-  <p>There are no user.</p>
+  <p>There are no products.</p>
   {% elif count == 1 %}
-  <p>There is 1 user.</p>
+  <p>There is 1 product.</p>
   {% else %}
-  <p>There are {{ count }} users.</p>
+  <p>There are {{ count }} products.</p>
   {% endif %}
 </div>
 <div class="container-sm d-flex justify-content-center" style="padding-bottom: 3rem">
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Id</th>
-        <th>Password</th>
-        <th>Role</th>
-        <th>Actions</th>
-
+        <th>Name</th>
+        <th>Rating</th>
+        <th>Description</th>
+        <th>Price</th>
       </tr>
     </thead>
     <tbody>
-    {% for user in users_list %}
+    {% for products in products_list %}
      <tr>
-        <td>{{ user.get_username() }}</td>
-        <td>{{ user.get_email() }}</td>
-        <td>{{ user.get_id() }}</td>
-        <td>{{ user.get_password() }}</td>
-        <td>{{ user.get_role() }}</td>
-        <td><a href="/updateUsers/{{user.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
+        <td>{{ products.get_name() }}</td>
+        <td>{{ products.get_rating() }}</td>
+        <td>{{ products.get_description() }}</td>
+        <td>{{ products.get_price() }}</td>
+         <td><a href="/updateProducts/{{products.get_product_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
-          <form action="{{url_for('delete_user', id=user.get_id())}}" method="POST">
+          <form action="{{url_for('delete_product', id=products.get_product_id())}}" method="POST">
 <!-- Button to Open the Modal -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{user.get_id()}}">
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{products.get_product_id()}}">
   <i class="fa fa-trash"></i>
 </button>
 
 <!-- The Modal -->
-<div class="modal" id="myModal_{{user.get_id()}}">
+<div class="modal" id="myModal_{{products.get_product_id()}}">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -72,7 +68,7 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        Are you sure you want to delete {{user.get_id()}} account?
+        Are you sure you want to delete {{products.get_name()}}?
       </div>
 
       <!-- Modal footer -->
@@ -94,5 +90,7 @@
 </div>
 </div>
 <script src="../static/javascript/sidebar.js"></script>
+
+<!--</div>-->
 
 {% endblock %}

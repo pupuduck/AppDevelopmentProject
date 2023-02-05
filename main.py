@@ -374,6 +374,7 @@ def create_job_positions():
         job_positions_dict = {}
         db = shelve.open('DB/Hiring/jobPositions')
         image = Image.open(create_job_positions_form.job_image.data)
+        image.resize((300, 300))
         random_hex = secrets.token_hex(8)
         random_hex = "static/jobImages/" + random_hex + ".png"
         image.save(random_hex)
@@ -600,7 +601,7 @@ def create_products():
 
 
 @app.route('/products')
-def retrieve_product():
+def display_product():
     products_dict = {}
     db = shelve.open('DB/Product/product', 'r')
     products_dict = db['Products']
@@ -612,6 +613,69 @@ def retrieve_product():
         products_list.append(product)
 
     return render_template('products.html', count=len(products_list), products_list=products_list)
+
+
+@app.route('/retrieveProducts')
+def retrieve_product():
+    update_product_form = CreateProductForm()
+    products_dict = {}
+    db = shelve.open('DB/Product/product', 'r')
+    products_dict = db['Products']
+    db.close()
+
+    products_list = []
+    for key in products_dict:
+        product = products_dict.get(key)
+        products_list.append(product)
+
+    return render_template('retrieveProducts.html', count=len(products_list), products_list=products_list, form=update_product_form)
+
+
+@app.route('/updateProducts/<int:id>/', methods=['GET', 'POST'])
+def update_product(id):
+    update_product_form = CreateProductForm()
+    if request.method == 'POST' and update_product_form.validate():
+        products_dict = {}
+        db = shelve.open('DB/Product/product', 'w')
+        products_dict = db['Products']
+
+        product = products_dict.get(id)
+        product.set_name(update_product_form.Name.data)
+        product.set_rating(update_product_form.Rating.data)
+        product.set_description(update_product_form.Description.data)
+        product.set_price(round(update_product_form.Price.data, 2))
+
+        db['Products'] = products_dict
+        db.close()
+
+        return redirect(url_for('retrieve_product'))
+    else:
+        products_dict = {}
+        db = shelve.open('DB/Product/product', 'r')
+        products_dict = db['Products']
+        db.close()
+
+        product = products_dict.get(id)
+        update_product_form.Name.data = product.get_name()
+        update_product_form.Rating.data = product.get_rating()
+        update_product_form.Description.data = product.get_description()
+        update_product_form.Price.data = product.get_price()
+
+        return render_template('updateProducts.html', form=update_product_form)
+
+
+@app.route('/deleteProduct/<int:id>', methods=['POST'])
+def delete_product(id):
+    products_dict = {}
+    db = shelve.open('DB/Product/product', 'w')
+    products_dict = db['Products']
+
+    products_dict.pop(id)
+
+    db['Products'] = products_dict
+    db.close()
+
+    return redirect(url_for('retrieve_product'))
 
 
 if __name__ == '__main__':
