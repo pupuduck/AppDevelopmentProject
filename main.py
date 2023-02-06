@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
-from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm, UpdatePasswordForm
+from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm, UpdatePasswordForm, CreditCardForm
 from models.auth.user import User
+from models.auth.paymentMethods import paymentMethods
 from models.cust.contactMessage import Message
 from models.cust.contactForm import CreateMessageForm
 from models.hiring.hiringForm import CreateResumesForm, CreateJobPositionsForm
@@ -51,7 +52,6 @@ def login():
         username = login_form.username.data
         password = login_form.password.data
         db = shelve.open('DB/Customer/customer')
-        user_dict = {}
         user_dict = db['customer']
         db.close()
         user_list = []
@@ -81,8 +81,7 @@ def register():
         email = register_form.email.data
         password = register_form.password1.data
         password1 = register_form.password2.data
-        current_GMT = time.gmtime()
-        id = int(calendar.timegm(current_GMT))
+
         cust_dict = {}
         try:
             db = shelve.open('DB/Customer/customer')
@@ -90,19 +89,22 @@ def register():
                 cust_dict = db['customer']
             else:
                 db['customer'] = cust_dict
-            object_list = []
-
+            email_list = []
+            username_list = []
             for objects in cust_dict.values():
-                object_list.append(objects.get_email())
-            if username in cust_dict and email in object_list:
+                email_list.append(objects.get_email())
+                username_list.append(objects.get_username())
+            if username in username_list and email in email_list:
                 error = "Both username and email are already taken"
-            elif email in object_list:
+            elif email in email_list:
                 error = "Email is already taken"
-            elif username in cust_dict:
+            elif username in username_list:
                 error = "Username is already taken"
             elif password != password1:
                 error = "Passwords do not match"
             else:
+                current_GMT = time.gmtime()
+                id = int(calendar.timegm(current_GMT))
                 c1 = User(username, email, password, id, 'Customer', 'Active')
                 cust_dict[c1.get_id()] = c1
                 db['customer'] = cust_dict
@@ -123,28 +125,54 @@ def update():
     update_form = UpdateProfileForm()
     submit1 = update_form.submit1.data
     submit2 = update_password_form.submit2.data
+    error = None
+    error2 = None
+    update = False
+    for i in current_user.get_payment_methods():
+        print(i.get_number())
     if request.method == "POST" and submit1:
-        db = shelve.open('DB/Customer/customer')
         user_dict = {}
-        user_dict = db['customer']
-        for users in user_dict.values():
-            if users.get_id() == current_user.get_id():
-                users.set_username(update_form.username.data)
-                users.set_email(update_form.email.data)
-                users.set_location(update_form.location.data)
-                users.set_phone(update_form.phone.data)
-                users.set_birthday(update_form.birthday.data)
-
-                image = Image.open(update_form.image.data)
-                random_hex = secrets.token_hex(8)
-                random_hex = "static/profileImage/" + random_hex + ".jpg"
-                image.save(random_hex)
-                users.set_image(random_hex)
+        try:
+            db = shelve.open('DB/Customer/customer')
+            if 'customer' in db:
+                user_dict = db['customer']
+            else:
                 db['customer'] = user_dict
-                db.close()
-                flash('Profile successfully updated')
-                print(f"User {current_user.get_id()} profile updated")
-                return redirect(url_for('update'))
+
+            user_dict = db['customer']
+            name_list = []
+            email_list = []
+            user = []
+            for users in user_dict.values():
+                name_list.append(users.get_username())
+                email_list.append(users.get_email())
+                if users.get_id() == current_user.get_id():
+                    user.append(users)
+            for users in user:
+                if update_form.username.data in name_list and update_form.username.data != current_user.get_username():
+                    error = "Username is already taken"
+                if update_form.email.data in email_list and update_form.email.data != current_user.get_email():
+                    error2 = "Email is already taken"
+                if not error and not error2:
+                    users.set_email(update_form.email.data)
+                    users.set_username(update_form.username.data)
+                    users.set_location(update_form.location.data)
+                    users.set_phone(update_form.phone.data)
+                    users.set_birthday(update_form.birthday.data)
+                    if update_form.image.data:
+                        image = Image.open(update_form.image.data)
+                        random_hex = secrets.token_hex(8)
+                        random_hex = "static/profileImage/" + random_hex + ".jpg"
+                        image.save(random_hex)
+                        users.set_image(random_hex)
+                    db['customer'] = user_dict
+                    db.close()
+                    flash('Profile successfully updated')
+                    print(f"User {current_user.get_id()} profile updated")
+                    return redirect(url_for('update'))
+
+        except IOError:
+            print("IOError")
 
     else:
         update_form.username.data = current_user.get_username()
@@ -172,7 +200,53 @@ def update():
         flash('Password successfully changed!')
         print(f'Password changed from {password1} to {password2}')
 
-    return render_template('update.html', update_form=update_form, update_password_form=update_password_form)
+    return render_template('update.html', update_form=update_form, update_password_form=update_password_form, error=error, error2=error2)
+
+
+@app.route('/addPaymentMethod', methods=['GET', 'POST'])
+def add_payment_method():
+    add_payment_methods = CreditCardForm()
+    error = None
+    if request.method == "POST":
+
+        user_dict = {}
+        try:
+            db = shelve.open('DB/Customer/customer')
+            if 'customer' in db:
+                user_dict = db['customer']
+            else:
+                db['customer'] = user_dict
+
+            if isValidCardNumber(str(add_payment_methods.card_number.data)):
+                expiry_date = str(add_payment_methods.expiry_month.data) + '/' + str(add_payment_methods.expiry_year.data)
+                card = paymentMethods(add_payment_methods.full_name.data, add_payment_methods.card_number.data,
+                                      add_payment_methods.cvv.data, expiry_date)
+                for user in user_dict.values():
+                    if user.get_id() == current_user.get_id():
+                        card_list = user.get_payment_methods()
+                        card_list.append(card)
+            else:
+                error = "Invalid credit card number"
+
+            db['customer'] = user_dict
+            db.close()
+        except IOError:
+            print("IOError")
+    return render_template('addPaymentMethod.html', form=add_payment_methods, error=error)
+
+
+def isValidCardNumber(card_input):
+    card_input = card_input[::- 1]
+    card_input = [int(x) for x in card_input]
+    for i in range(1, len(card_input), 2):
+        card_input[i] *= 2
+
+        if card_input[i] > 9:
+            card_input[i] = card_input[i] % 10 + 1
+
+    total = sum(card_input)
+
+    return total % 10 == 0
 
 
 @app.route('/logout', methods=['GET'])

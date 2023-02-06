@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+                content="width=device-width, initial-scale=1">
+    <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+</head>
+
+<body>
+    <center>
+        <h1 style="color:green;padding:13px;">
+         GeeksforGeeks</h1>
+        <h3>
+            Input[type=text] allow only
+            Numeric Value Example
+        </h3>
+        <br>
+
+        <form autocomplete="off" id="form1">
+            <b>Enter 4-digit Pin:</b>
+            <input type="text" name="numonly"
+                   maxlength="4">
+            <br>
+            <br>
+
+            <b>Enter passkey:</b>
+            <input type="text" name="passkey"
+                   id="num"
+                   oninput="return onlynum()"
+                   minlength="2">
+        </form>
+
+    </center>
+    <script>
+        $(function() {
+            $("input[name='numonly']").on('input', function(e) {
+                $(this).val($(this).val().replace(/[^0-9]/g, ''));
+            });
+        });
+    </script>
+    <script>
+        function onlynum() {
+            var fm = document.getElementById("form2");
+            var ip = document.getElementById("num");
+            var tag = document.getElementById("value");
+            var res = ip.value;
+
+            if (res != '') {
+                if (isNaN(res)) {
+
+                    // Set input value empty
+                    ip.value = "";
+
+                    // Reset the form
+                    fm.reset();
+                    return false;
+                } else {
+                    return true
+                }
+            }
+        }
+    </script>
+</body>
+</html>

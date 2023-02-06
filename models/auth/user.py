@@ -13,6 +13,8 @@ class User(UserMixin):
         self.__role = role
         self.__image = None
         self.__status = status
+        self.__payment_methods = []
+        self.__cart = None
 
     def set_username(self, username):
         self.__username = username
@@ -44,6 +46,12 @@ class User(UserMixin):
     def set_status(self, status):
         self.__status = status
 
+    def set_payment_methods(self, payment_method):
+        self.__payment_methods = payment_method
+
+    def set_cart(self, cart):
+        self.__cart = cart
+
     def get_username(self):
         return self.__username
 
@@ -73,3 +81,9 @@ class User(UserMixin):
 
     def get_status(self):
         return self.__status
+
+    def get_payment_methods(self):
+        return self.__payment_methods
+
+    def get_cart(self):
+        return self.__cart

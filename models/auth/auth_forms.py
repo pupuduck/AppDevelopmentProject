@@ -1,4 +1,4 @@
-from wtforms import StringField, EmailField, PasswordField, SubmitField, IntegerField, DateField, FileField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, IntegerField, DateField, FileField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from flask_wtf import FlaskForm
 
@@ -32,3 +32,17 @@ class UpdatePasswordForm(FlaskForm):
     password2 = PasswordField('Enter new password', validators=[DataRequired(), Length(min=8), EqualTo('password3', message="Passwords must be the same")])
     password3 = PasswordField('Re-enter new password', validators=[DataRequired(), Length(min=8), EqualTo('password2', message="Passwords must be the same")])
     submit2 = SubmitField('Save Changes')
+
+
+class CreditCardForm(FlaskForm):
+    full_name = StringField('Cardholder name: ', validators=[DataRequired()])
+    card_number = StringField('Card number: ', validators=[DataRequired(), Length(16)])
+    cvv = StringField('CVV: ', validators=[Length(3)])
+    expiry_month = SelectField('Expiry Month: ', choices=[(1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'),
+                                                          (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'),
+                                                          (11, '11'), (12, '12')])
+    expiry_year = SelectField('Expiry Year: ', choices=[(1, '23'), (2, '24'), (3, '25'), (4, '26'), (5, '27'),
+                                                        (6, '28'), (7, '29'), (8, '30'), (9, '31'), (10, '32'),
+                                                        (11, '33'), (12, '34')])
+
+
