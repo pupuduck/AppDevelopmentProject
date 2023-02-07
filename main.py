@@ -64,7 +64,7 @@ def login():
             if user.get_password() != password:
                 error = 'Password is incorrect'
             else:
-                flash(f'Successfully logged in. Welcome back {user.get_username()}!', 'success')
+                flash(f'Successfully logged in. Welcome back {user.get_username()}!', category='alert-success')
                 login_user(user)
                 print(f"User {current_user.get_id()} logged in")
                 return redirect(url_for('home'))
@@ -109,7 +109,7 @@ def register():
                 cust_dict[c1.get_id()] = c1
                 db['customer'] = cust_dict
                 db.close()
-                flash(f'Account successfully created. Welcome {c1.get_username()}')
+                flash(f'Account successfully created. Welcome {c1.get_username()}', category='alert-success')
                 print(f"Account created, id = {id}")
                 return redirect(url_for('login'))
         except IOError:
@@ -164,7 +164,7 @@ def update():
                         users.set_image(random_hex)
                     db['customer'] = user_dict
                     db.close()
-                    flash('Profile successfully updated')
+                    flash('Profile successfully updated', category='alert-success')
                     print(f"User {current_user.get_id()} profile updated")
                     return redirect(url_for('update'))
 
@@ -194,7 +194,7 @@ def update():
                     error = 'Current password is wrong'
         db['customer'] = user_dict
         db.close()
-        flash('Password successfully changed!')
+        flash('Password successfully changed!', category='alert-success')
         print(f'Password changed from {password1} to {password2}')
 
     card_list = current_user.get_payment_methods()
@@ -222,18 +222,21 @@ def add_payment_method():
             if isValidCardNumber(str(add_payment_methods.card_number.data)):
                 for users in user_dict.values():
                     if users.get_id() == current_user.get_id():
+                        print(users)
                         card_list = users.get_payment_methods()
                         card_id = len(card_list) + 1
                         expiry_date = str(add_payment_methods.expiry_month.data) + '/' + str(add_payment_methods.expiry_year.data)
-                        print(expiry_date)
                         card = paymentMethods(card_id, add_payment_methods.full_name.data, add_payment_methods.card_number.data,
                                               add_payment_methods.cvv.data, expiry_date)
                         card_list.append(card)
+                        users.set_payment_methods(card_list)
+                db['customer'] = user_dict
+                db.close()
+                flash('New credit card added!', category='alert-success')
+                return redirect('update')
             else:
                 error = "Invalid credit card number"
 
-            db['customer'] = user_dict
-            db.close()
         except IOError:
             print("IOError")
     return render_template('addPaymentMethod.html', form=add_payment_methods, error=error)
@@ -262,6 +265,7 @@ def remove_payment_method(card_id):
             user_dict[user.get_id()] = user
             db['customer'] = user_dict
             db.close()
+            flash('Credit card removed', category='alert-danger')
             return redirect(url_for('update'))
 
     except IOError:
