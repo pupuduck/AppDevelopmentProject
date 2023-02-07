@@ -127,9 +127,6 @@ def update():
     submit2 = update_password_form.submit2.data
     error = None
     error2 = None
-    update = False
-    for i in current_user.get_payment_methods():
-        print(i.get_number())
     if request.method == "POST" and submit1:
         user_dict = {}
         try:
@@ -200,9 +197,14 @@ def update():
         flash('Password successfully changed!')
         print(f'Password changed from {password1} to {password2}')
 
-    return render_template('update.html', update_form=update_form, update_password_form=update_password_form, error=error, error2=error2)
+    card_list = current_user.get_payment_methods()
+    card_count = len(card_list)
+
+    return render_template('update.html', update_form=update_form, update_password_form=update_password_form,
+                           error=error, error2=error2, card_list=card_list, card_count=card_count)
 
 
+# adding payment methods
 @app.route('/addPaymentMethod', methods=['GET', 'POST'])
 def add_payment_method():
     add_payment_methods = CreditCardForm()
@@ -218,12 +220,14 @@ def add_payment_method():
                 db['customer'] = user_dict
 
             if isValidCardNumber(str(add_payment_methods.card_number.data)):
-                expiry_date = str(add_payment_methods.expiry_month.data) + '/' + str(add_payment_methods.expiry_year.data)
-                card = paymentMethods(add_payment_methods.full_name.data, add_payment_methods.card_number.data,
-                                      add_payment_methods.cvv.data, expiry_date)
-                for user in user_dict.values():
-                    if user.get_id() == current_user.get_id():
-                        card_list = user.get_payment_methods()
+                for users in user_dict.values():
+                    if users.get_id() == current_user.get_id():
+                        card_list = users.get_payment_methods()
+                        card_id = len(card_list) + 1
+                        expiry_date = str(add_payment_methods.expiry_month.data) + '/' + str(add_payment_methods.expiry_year.data)
+                        print(expiry_date)
+                        card = paymentMethods(card_id, add_payment_methods.full_name.data, add_payment_methods.card_number.data,
+                                              add_payment_methods.cvv.data, expiry_date)
                         card_list.append(card)
             else:
                 error = "Invalid credit card number"
@@ -235,6 +239,38 @@ def add_payment_method():
     return render_template('addPaymentMethod.html', form=add_payment_methods, error=error)
 
 
+@app.route('/removePaymentMethod/<int:card_id>', methods=['GET', 'POST'])
+def remove_payment_method(card_id):
+    try:
+        db = shelve.open('DB/Customer/customer')
+        user_dict = {}
+        user_dict = db['customer']
+        if 'customer' in db:
+            user_dict = db['customer']
+        else:
+            db['customer'] = user_dict
+
+        card_list = []
+        for user in user_dict.values():
+            if user.get_id() == current_user.get_id():
+                card_list = user.get_payment_methods()
+                for cards in card_list:
+                    if cards.get_card_id() == card_id:
+                        index = card_list.index(cards)
+                        del card_list[index]
+            user.set_payment_methods(card_list)
+            user_dict[user.get_id()] = user
+            db['customer'] = user_dict
+            db.close()
+            return redirect(url_for('update'))
+
+    except IOError:
+        print("IOError")
+
+    return redirect(url_for('update'))
+
+
+# validation for card number
 def isValidCardNumber(card_input):
     card_input = card_input[::- 1]
     card_input = [int(x) for x in card_input]

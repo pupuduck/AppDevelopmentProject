@@ -1,5 +1,6 @@
 class paymentMethods:
-    def __init__(self, full_name, number, cvv, expiry_date):
+    def __init__(self, card_id, full_name, number, cvv, expiry_date):
+        self.__card_id = card_id
         self.__full_name = full_name
         self.__number = number
         self.__cvv = cvv
@@ -17,6 +18,9 @@ class paymentMethods:
     def set_expiry_date(self, expiry_date):
         self.__expiry_date = expiry_date
 
+    def set_card_id(self, card_id):
+        self.__card_id = card_id
+
     def get_full_name(self):
         return self.__full_name
 
@@ -28,3 +32,6 @@ class paymentMethods:
 
     def get_expiry_date(self):
         return self.__expiry_date
+
+    def get_card_id(self):
+        return self.__card_id
