@@ -256,7 +256,8 @@ def add_payment_method():
                         card_id = len(card_list) + 1
                         expiry_date = str(add_payment_methods.expiry_month.data) + '/' + str(add_payment_methods.expiry_year.data)
                         card = paymentMethods(card_id, add_payment_methods.full_name.data, add_payment_methods.card_number.data,
-                                              add_payment_methods.cvv.data, expiry_date)
+                                              add_payment_methods.cvv.data, expiry_date, add_payment_methods.street_address.data,
+                                              add_payment_methods.unit_number.data, add_payment_methods.country.data, add_payment_methods.postal_code.data)
                         card_list.append(card)
                         users.set_payment_methods(card_list)
                 db['customer'] = user_dict
@@ -386,6 +387,7 @@ def createStaff():
 
 @app.route('/retrieveUsers')
 def retrieve_users():
+    users_list = []
     users_dict = {}
     try:
         db = shelve.open('DB/Customer/customer')
@@ -393,13 +395,11 @@ def retrieve_users():
             users_dict = db['customer']
         else:
             db['customer'] = users_dict
-
-        users_list = []
-        for key in users_dict.values():
+        db.close()
+        for key in users_dict:
             user = users_dict.get(key)
             users_list.append(user)
 
-        db.close()
     except IOError:
         print("Error IO Error")
     except Exception as ex:

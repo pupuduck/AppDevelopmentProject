@@ -1,6 +1,14 @@
 from wtforms import StringField, EmailField, PasswordField, SubmitField, IntegerField, DateField, FileField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 from flask_wtf import FlaskForm
+from wtforms import SelectField
+import pycountry
+
+
+class CountrySelectField(SelectField):
+    def __init__(self, *args, **kwargs):
+        super(CountrySelectField, self).__init__(*args, **kwargs)
+        self.choices = [(country.alpha_2, country.name) for country in pycountry.countries]
 
 
 class RegisterForm(FlaskForm):
@@ -35,14 +43,18 @@ class UpdatePasswordForm(FlaskForm):
 
 
 class CreditCardForm(FlaskForm):
-    full_name = StringField('Cardholder name: ', validators=[DataRequired()])
-    card_number = StringField('Card number: ', validators=[DataRequired(), Length(16)])
-    cvv = StringField('CVV: ', validators=[Length(3)])
-    expiry_month = SelectField('Expiry Month: ', choices=[(1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'),
+    full_name = StringField('Cardholder name', validators=[DataRequired()])
+    card_number = StringField('Card number', validators=[DataRequired(), Length(16)])
+    cvv = StringField('CVV', validators=[Length(3)])
+    expiry_month = SelectField('Expiry Month', choices=[(1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'),
                                                           (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'),
                                                           (11, '11'), (12, '12')])
-    expiry_year = SelectField('Expiry Year: ', choices=[(23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'),
+    expiry_year = SelectField('Expiry Year', choices=[(23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'),
                                                         (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'),
                                                         (33, '33'), (34, '34')])
+    street_address = StringField('Street Address', validators=[DataRequired()])
+    postal_code = StringField('Postal code', validators=[DataRequired(), Length(6)])
+    country = CountrySelectField('Country', validators=[DataRequired()])
+    unit_number = StringField('Unit number', validators=[DataRequired()])
 
 

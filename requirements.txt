@@ -18,3 +18,4 @@ pyproject_hooks==1.0.0
 tomli==2.0.1
 Werkzeug==2.2.2
 WTForms==3.0.1
+pycountry~=22.3.5

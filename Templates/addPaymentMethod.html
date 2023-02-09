@@ -8,46 +8,85 @@
       <div class="card rounded-3">
         <div class="card-body p-4">
           <div class="text-center mb-4">
-            <h3>Settings</h3>
-            <h6>Payment</h6>
+            <h3>Add Payment Method</h3>
           </div>
           <form action="" method="post" id="form2">
 
 
-            <p class="fw-bold mb-4">Add new card:</p>
+            <p class="text-secondary fw-bold mb-4">Card details</p>
 
             <div class="form-outline mb-4">
-              <div class="col-10  ">
+              <div class="col-11">
               {{ form.full_name.label( class="form-label") }}
               {{ form.full_name(class="form-control form-control-lg") }}
                 </div>
             </div>
 
             <div class="row mb-4">
-              <div class="col-7">
+              <div class="col-11">
                 <div class="form-outline">
                   {{ form.card_number.label( class="form-label") }}
                   {{ form.card_number(class="form-control form-control-lg", id="num", oninput="return onlynum()", maxlength="16") }}
-                </div>
-              </div>
-              <div class="col-3 mb-4">
-                <div class="form-outline">
-                  {{ form.cvv.label( class="form-label") }}
-                  {{ form.cvv(class="form-control form-control-lg", id="num", oninput="return onlynum()", maxlength="4") }}
 
                 </div>
+
               </div>
-              <div class="col-4">
+              <div class="col-7">
+                <i class="fa-brands fa-cc-visa text-primary"></i>
+                <i class="fa-brands fa-cc-mastercard text-danger"></i>
+                <i class="fa-brands fa-cc-amex"></i>
+              </div>
+            </div>
+            <div class="row mb-4">
+
+              <div class="col-3">
                 <div class="form-outline">
                   {{ form.expiry_year.label( class="form-label") }}
                   {{ form.expiry_year(class="form-control form-control-lg") }}
                 </div>
               </div>
               /
-              <div class="col-4">
+              <div class="col-3">
                 <div class="form-outline">
                   {{ form.expiry_month.label( class="form-label") }}
                   {{ form.expiry_month(class="form-control form-control-lg") }}
+                </div>
+              </div>
+              <div class="col-3 mb-4">
+                <div class="form-outline">
+                  {{ form.cvv.label( class="form-label") }}
+                  {{ form.cvv(class="form-control form-control-lg", id="num", oninput="return onlynum()", maxlength="4") }}
+                </div>
+              </div>
+            </div>
+
+            <p class="text-secondary fw-bold mb-4">Billing Address</p>
+
+            <div class="form-outline mb-4">
+              <div class="col-11  ">
+              {{ form.street_address.label( class="form-label") }}
+              {{ form.street_address(class="form-control form-control-lg") }}
+                </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-7">
+                <div class="form-outline">
+                  {{ form.unit_number.label( class="form-label") }}
+                  {{ form.unit_number(class="form-control form-control-lg")}}
+                </div>
+              </div>
+              <div class="col-4 mb-4">
+                <div class="form-outline">
+                  {{ form.postal_code.label( class="form-label") }}
+                  {{ form.postal_code(class="form-control form-control-lg", maxlength="6")}}
+
+                </div>
+              </div>
+              <div class="col-7">
+                <div class="form-outline">
+                  {{ form.country.label( class="form-label") }}
+                  {{ form.country(class="form-control form-control-lg") }}
                 </div>
               </div>
             </div>
