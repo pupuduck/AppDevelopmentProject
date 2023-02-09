@@ -408,6 +408,11 @@ def retrieve_users():
     return render_template('retrieveUsers.html', count=len(users_list), users_list=users_list)
 
 
+@app.route('/usersOverview')
+def users_overview():
+    return render_template('usersOverview.html')
+
+
 @app.route('/deleteUsers/<int:id>', methods=['POST'])
 def delete_user(id):
     users_dict = {}
