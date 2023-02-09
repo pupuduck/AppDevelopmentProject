@@ -29,10 +29,19 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    db = shelve.open('DB/Customer/customer')
     user_dict = {}
-    user_dict = db['customer']
-    db.close()
+    try:
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            user_dict = db['customer']
+        else:
+            db['customer'] = user_dict
+        user_dict = db['customer']
+        db.close()
+    except IOError:
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
     for objects in user_dict.values():
         if objects.get_id() == user_id:
             return objects
@@ -48,26 +57,36 @@ def home():
 def login():
     login_form = LoginForm()
     error = None
+    user_dict = {}
     if request.method == "POST":
-        username = login_form.username.data
-        password = login_form.password.data
-        db = shelve.open('DB/Customer/customer')
-        user_dict = db['customer']
-        db.close()
-        user_list = []
-        for user in user_dict.values():
-            if username == user.get_username() and user.get_status() == 'Active':
-                user_list.append(user)
+        try:
+            db = shelve.open('DB/Customer/customer')
+            username = login_form.username.data
+            password = login_form.password.data
+            if 'customer' in db:
+                user_dict = db['customer']
             else:
-                error = "Username does not exist"
-        for user in user_list:
-            if user.get_password() != password:
-                error = 'Password is incorrect'
-            else:
-                flash(f'Successfully logged in. Welcome back {user.get_username()}!', category='alert-success')
-                login_user(user)
-                print(f"User {current_user.get_id()} logged in")
-                return redirect(url_for('home'))
+                db['customer'] = user_dict
+
+            user_list = []
+            for user in user_dict.values():
+                if username == user.get_username() and user.get_status() == 'Active':
+                    user_list.append(user)
+                else:
+                    error = "Username does not exist"
+            for user in user_list:
+                if user.get_password() != password:
+                    error = 'Password is incorrect'
+                else:
+                    flash(f'Successfully logged in. Welcome back {user.get_username()}!', category='alert-success')
+                    login_user(user)
+                    print(f"User {current_user.get_id()} logged in")
+                    return redirect(url_for('home'))
+            db.close()
+        except IOError:
+            print("Error IO Error")
+        except Exception as ex:
+            print(f"unknown error occurred as {ex}")
 
     return render_template('login.html', form=login_form, error=error)
 
@@ -135,8 +154,6 @@ def update():
                 user_dict = db['customer']
             else:
                 db['customer'] = user_dict
-
-            user_dict = db['customer']
             name_list = []
             email_list = []
             user = []
@@ -167,9 +184,10 @@ def update():
                     flash('Profile successfully updated', category='alert-success')
                     print(f"User {current_user.get_id()} profile updated")
                     return redirect(url_for('update'))
-
         except IOError:
-            print("IOError")
+            print("Error IO Error")
+        except Exception as ex:
+            print(f"unknown error occurred as {ex}")
 
     else:
         update_form.username.data = current_user.get_username()
@@ -183,19 +201,30 @@ def update():
         password1 = update_password_form.password1.data
         password2 = update_password_form.password2.data
         error = None
-        db = shelve.open('DB/Customer/customer')
-        user_dict = {}
-        user_dict = db['customer']
-        for users in user_dict.values():
-            if users.get_id() == current_user.get_id():
-                if current_user.get_password() == password1:
-                    users.set_password(password2)
-                else:
-                    error = 'Current password is wrong'
-        db['customer'] = user_dict
-        db.close()
-        flash('Password successfully changed!', category='alert-success')
-        print(f'Password changed from {password1} to {password2}')
+        try:
+            db = shelve.open('DB/Customer/customer')
+            user_dict = {}
+            if 'customer' in db:
+                user_dict = db['customer']
+            else:
+                db['customer'] = user_dict
+
+            for users in user_dict.values():
+                if users.get_id() == current_user.get_id():
+                    if current_user.get_password() == password1:
+                        users.set_password(password2)
+                    else:
+                        error = 'Current password is wrong'
+            db['customer'] = user_dict
+            db.close()
+
+            flash('Password successfully changed!', category='alert-success')
+            print(f'Password changed from {password1} to {password2}')
+
+        except IOError:
+            print("Error IO Error")
+        except Exception as ex:
+            print(f"unknown error occurred as {ex}")
 
     card_list = current_user.get_payment_methods()
     card_count = len(card_list)
@@ -247,7 +276,6 @@ def remove_payment_method(card_id):
     try:
         db = shelve.open('DB/Customer/customer')
         user_dict = {}
-        user_dict = db['customer']
         if 'customer' in db:
             user_dict = db['customer']
         else:
@@ -269,7 +297,9 @@ def remove_payment_method(card_id):
             return redirect(url_for('update'))
 
     except IOError:
-        print("IOError")
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
 
     return redirect(url_for('update'))
 
@@ -303,7 +333,6 @@ def delete():
     try:
         db = shelve.open('DB/Customer/customer')
         user_dict = {}
-        user_dict = db['customer']
         if 'customer' in db:
             user_dict = db['customer']
         else:
@@ -358,14 +387,23 @@ def createStaff():
 @app.route('/retrieveUsers')
 def retrieve_users():
     users_dict = {}
-    db = shelve.open('DB/Customer/customer')
-    users_dict = db['customer']
-    db.close()
+    try:
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            users_dict = db['customer']
+        else:
+            db['customer'] = users_dict
 
-    users_list = []
-    for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
+        users_list = []
+        for key in users_dict.values():
+            user = users_dict.get(key)
+            users_list.append(user)
+
+        db.close()
+    except IOError:
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
 
     return render_template('retrieveUsers.html', count=len(users_list), users_list=users_list)
 
@@ -375,7 +413,6 @@ def delete_user(id):
     users_dict = {}
     try:
         db = shelve.open('DB/Customer/customer')
-        users_dict = db['customer']
         if 'customer' in db:
             users_dict = db['customer']
         else:
