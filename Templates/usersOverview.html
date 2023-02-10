@@ -10,7 +10,7 @@
 <!--  <a href="/retrieveResumes">View job applications</a>-->
   <a href="/createJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
 <!--  <a href="/retrieveJobPositions">View job positions</a>-->
-  <a href="/retrieveUsers"><i class="fa-solid fa-users"></i>User management</a>
+  <a href="/usersOverview"><i class="fa-solid fa-users"></i>User management</a>
   <a href="/createProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
 <!--  <a href="/retrieveProducts">View Products</a>-->
 </div>
@@ -74,6 +74,7 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 NO. of customer</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ customer_count }}</div>
+
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-brands fa-intercom fa-2x text-gray-300"></i>
@@ -101,90 +102,45 @@
                             </div>
                         </div>
 
-                    <div class="row">
+                    <div class="row mb-4">
 
                         <div class="col-lg-6">
 
                             <!-- Default Card Example -->
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    View all users
+                            <div class="card" style="min-height: 430px">
+                                <div class="card-header fw-bold">
+                                    VIEW ALL USERS
                                 </div>
                                 <div class="card-body">
                                     Clicking here grants access to an extensive database of all users, allowing you to easily navigate and view their profiles at your convenience.
                                 </div>
-
+                                    <div class="text-center pb-2 card-body"><img style="height: 150" class="img-thumbnail w-75" src="/static/images/Screenshot_20230211_012120.png" alt=""></div>
                                 <div class="class-body p-3">
-                                    <button type="button" class="btn btn-secondary"><a href="/retrieveUsers">View all users</a></button>
-                                </div>
-                            </div>
-
-                            <!-- Basic Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
-                                </div>
-                                <div class="card-body">
-                                    The styling for this basic card example is created by using default Bootstrap
-                                    utility classes. By using utility classes, the style of the card component can be
-                                    easily modified with no need for any custom CSS!
+                                    <button type="button" class="btn btn-secondary btn-success"><a class='text-decoration-none text-light' href="/retrieveUsers">View all users</a></button>
                                 </div>
                             </div>
 
                         </div>
-
                         <div class="col-lg-6">
 
-                            <!-- Dropdown Card Example -->
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Dropdown Card Example</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+                            <!-- Default Card Example -->
+                            <div class="card" style="min-height: 430px">
+                                <div class="card-header fw-bold">
+                                    CREATE STAFF ACCOUNT
                                 </div>
-                                <!-- Card Body -->
                                 <div class="card-body">
-                                    Dropdown menus can be placed in the card header in order to extend the functionality
-                                    of a basic card. In this dropdown card example, the Font Awesome vertical ellipsis
-                                    icon in the card header can be clicked on in order to toggle a dropdown menu.
+                                   To create a staff account, go to the user management section, enter the required information, such as name, email, and role, and click "create account."
                                 </div>
-                            </div>
-
-                            <!-- Collapsable Card Example -->
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Accordion -->
-                                <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
-                                    role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                    <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
-                                </a>
-                                <!-- Card Content - Collapse -->
-                                <div class="collapse show" id="collapseCardExample">
-                                    <div class="card-body">
-                                        This is a collapsable card example using Bootstrap's built-in collapse
-                                        functionality. <strong>Click on the card header</strong> to see the card body
-                                        collapse and expand!
-                                    </div>
+                                         <div class="text-center card-body"><img class="img-thumbnail w-75" src="/static/images/Screenshot_20230211_032709.png" alt=""></div>
+                                <div class="class-body p-3">
+                                    <button type="button" class="btn btn-secondary btn-success"><a class='text-decoration-none text-light' href="/retrieveUsers">Create account</a></button>
                                 </div>
                             </div>
 
                         </div>
 
                     </div>
-
+                    </div>
                 </div>
                 <!-- /.container-fluid -->
             <!-- End of Main Content -->
