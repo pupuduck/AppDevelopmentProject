@@ -410,7 +410,34 @@ def retrieve_users():
 
 @app.route('/usersOverview')
 def users_overview():
-    return render_template('usersOverview.html')
+    users_dict = {}
+    users_list = []
+    staff_list = []
+    customer_list = []
+    active_list = []
+    try:
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            users_dict = db['customer']
+        else:
+            db['customer'] = users_dict
+        db.close()
+        for key in users_dict:
+            user = users_dict.get(key)
+            users_list.append(user)
+            if user.get_role() == "Admin":
+                staff_list.append(user)
+            if user.get_role() == "Customer":
+                customer_list.append(user)
+            if user.get_status() == "Active":
+                active_list.append(user)
+
+    except IOError:
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
+
+    return render_template('usersOverview.html', count=len(users_list), staff_count=len(staff_list), customer_count=len(customer_list), active_count=len(active_list))
 
 
 @app.route('/deleteUsers/<int:id>', methods=['POST'])
