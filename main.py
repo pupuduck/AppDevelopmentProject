@@ -698,12 +698,12 @@ def update_jobpositions(id):
         db.close()
 
         job_positions = job_positions_dict.get(id)
-        update_job_positions_form.job_name.data = job_positions.get_jobname()
-        update_job_positions_form.job_availability.data = job_positions.get_jobavailability()
+        update_job_positions_form.job_name.data = job_positions.get_job_name()
+        update_job_positions_form.job_availability.data = job_positions.get_job_availability()
 
-        update_job_positions_form.job_requirements.data = job_positions.get_jobrequirements()
-        update_job_positions_form.job_responsibility.data = job_positions.get_jobresponsibility()
-        update_job_positions_form.job_salary.data = job_positions.get_jobsalary()
+        update_job_positions_form.job_requirements.data = job_positions.get_job_requirements()
+        update_job_positions_form.job_responsibility.data = job_positions.get_job_responsibility()
+        update_job_positions_form.job_salary.data = job_positions.get_job_salary()
 
         return render_template('updateJobPositions.html', form=update_job_positions_form)
 
