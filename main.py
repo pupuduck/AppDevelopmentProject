@@ -123,13 +123,13 @@ def register():
                 error = "Passwords do not match"
             else:
                 current_GMT = time.gmtime()
-                id = int(calendar.timegm(current_GMT))
-                c1 = User(username, email, password, id, 'Customer', 'Active')
+                user_id = int(calendar.timegm(current_GMT))
+                c1 = User(username, email, password, user_id, 'Customer', 'Active')
                 cust_dict[c1.get_id()] = c1
                 db['customer'] = cust_dict
                 db.close()
                 flash(f'Account successfully created. Welcome {c1.get_username()}', category='alert-success')
-                print(f"Account created, id = {id}")
+                print(f"Account created, id = {user_id}")
                 return redirect(url_for('login'))
         except IOError:
             print("Error IO Error")
@@ -364,7 +364,7 @@ def createStaff():
     email = input("Enter email: ")
     password = "AdminPassword123"
     current_GMT = time.gmtime()
-    id = (calendar.timegm(current_GMT))
+    user_id = (calendar.timegm(current_GMT))
     role = "Admin"
     cust_dict = {}
     try:
@@ -374,7 +374,7 @@ def createStaff():
         else:
             db['customer'] = cust_dict
 
-        Admin = User(username, email, password, id, role, 'Active')
+        Admin = User(username, email, password, user_id, role, 'Active')
         cust_dict[Admin.get_id()] = Admin
         db['customer'] = cust_dict
         db.close()
@@ -385,33 +385,27 @@ def createStaff():
         print(f"unknown error occurred as {ex}")
 
 
+def massAccount(amount):
+    cust_dict = {}
+    try:
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            cust_dict = db['customer']
+        else:
+            db['customer'] = cust_dict
+        for i in range(amount):
+            Admin = User(f"test{i+1}", f"test{i+1}@gmail.com", "TESTTEST", i+1, 'Customer', "Active")
+            cust_dict[Admin.get_id()] = Admin
+            db['customer'] = cust_dict
+        db.close()
+    except IOError:
+        print("IOError")
+
+
 @app.route('/retrieveUsers')
 def retrieve_users():
     users_list = []
     users_dict = {}
-    try:
-        db = shelve.open('DB/Customer/customer')
-        if 'customer' in db:
-            users_dict = db['customer']
-        else:
-            db['customer'] = users_dict
-        db.close()
-        for key in users_dict:
-            user = users_dict.get(key)
-            users_list.append(user)
-
-    except IOError:
-        print("Error IO Error")
-    except Exception as ex:
-        print(f"unknown error occurred as {ex}")
-
-    return render_template('retrieveUsers.html', count=len(users_list), users_list=users_list)
-
-
-@app.route('/usersOverview')
-def users_overview():
-    users_dict = {}
-    users_list = []
     staff_list = []
     customer_list = []
     active_list = []
@@ -437,11 +431,11 @@ def users_overview():
     except Exception as ex:
         print(f"unknown error occurred as {ex}")
 
-    return render_template('usersOverview.html', count=len(users_list), staff_count=len(staff_list), customer_count=len(customer_list), active_count=len(active_list))
+    return render_template('retrieveUsers.html', count=len(users_list), users_list=users_list, staff_count=len(staff_list), customer_count=len(customer_list), active_count=len(active_list))
 
 
-@app.route('/deleteUsers/<int:id>', methods=['POST'])
-def delete_user(id):
+@app.route('/deleteUsers/<int:user_id>', methods=['POST'])
+def delete_user(user_id):
     users_dict = {}
     try:
         db = shelve.open('DB/Customer/customer')
@@ -450,7 +444,7 @@ def delete_user(id):
         else:
             db['customer'] = users_dict
 
-        users_dict.pop(str(id))
+        users_dict.pop(str(user_id))
 
         db['customer'] = users_dict
         db.close()
@@ -462,6 +456,9 @@ def delete_user(id):
 
 # end of account management
 # start customer support
+@app.route('/messagesOverview')
+def messages_overview():
+    return render_template('messagesOverview.html')
 
 
 @app.route('/contactUs', methods=['GET', 'POST'])

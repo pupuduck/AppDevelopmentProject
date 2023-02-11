@@ -4,6 +4,8 @@
 {% block content %}
 <link rel="stylesheet" href="../static/css/sidebar.css">
 <link rel="stylesheet" href="../static/css/CRUD.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
 <div id="mySidebar" class="sidebar">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <p class="text-center p-3"><img src="/static/images/TheLogo.png" alt="" style="width: 70px;, height: 70px;"></p>
@@ -11,10 +13,10 @@
   <a class="links" href="/admin"><i class="fa-solid fa-table-columns"></i>Dashboard</a>
   <a class="links" href="/retrieveMessages"><i class="fa-solid fa-envelope"></i>Messages</a>
 <!--  <a href="/retrieveResumes">View job applications</a>-->
-  <a class="links" href="/createJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
+  <a class="links" href="/retrieveJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
 <!--  <a href="/retrieveJobPositions">View job positions</a>-->
-  <a class="links" href="/usersOverview"><i class="fa-solid fa-users"></i>User management</a>
-  <a class="links" href="/createProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
+  <a class="links" href="/retrieveUsers"><i class="fa-solid fa-users"></i>User management</a>
+  <a class="links" href="/retrieveProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
 <!--  <a href="/retrieveProducts">View Products</a>-->
 </div>
 
@@ -32,8 +34,83 @@
   <p>There are {{ count }} users.</p>
   {% endif %}
 </div>
-<div class="container-sm d-flex justify-content-center" style="padding-bottom: 3rem">
-  <table class="table table-striped">
+    <!-- Earnings (Monthly) Card Example -->
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Amount of Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Annual) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                NO. of staff</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ staff_count }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-unlock-keyhole fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Earnings (Annual) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                NO. of customer</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ customer_count }}</div>
+
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-brands fa-intercom fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       <!-- Earnings (Annual) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Active Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_count }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-signal text-success fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Earnings (Monthly) Card Example -->
+
+<div class="" style="padding-bottom: 3rem">
+  <table class="table table-striped" id="Mytable">
     <thead>
       <tr>
         <th>Username</th>
@@ -42,7 +119,8 @@
         <th>Password</th>
         <th>Role</th>
         <th>Status</th>
-        <th>Actions</th>
+        <th>Update</th>
+          <th>Delete</th>
 
       </tr>
     </thead>
@@ -65,7 +143,7 @@
             </td>
         <td><a href="/updateUsers/{{user.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
-          <form action="{{url_for('delete_user', id=user.get_id())}}" method="POST">
+          <form action="{{url_for('delete_user', user_id=user.get_id())}}" method="POST">
 <!-- Button to Open the Modal -->
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{user.get_id()}}">
   <i class="fa fa-trash"></i>
@@ -100,11 +178,36 @@
         </td>
      </tr>
     {% endfor %}
+
     </tbody>
   </table>
+
 </div>
+<!--<nav aria-label="Page navigation example">-->
+<!--  <ul class="pagination justify-content-end">-->
+<!--    <li class="page-item disabled">-->
+<!--      <a class="page-link">Previous</a>-->
+<!--    </li>-->
+<!--    <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--    <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--    <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--    <li class="page-item">-->
+<!--      <a class="page-link" href="#">Next</a>-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</nav>-->
 </div>
+
 </div>
+
 <script src="../static/javascript/sidebar.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function () {
+    $('#Mytable').DataTable();
+        });
+</script>
 
 {% endblock %}

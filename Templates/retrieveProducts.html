@@ -11,12 +11,14 @@
   <a class="links" href="/admin"><i class="fa-solid fa-table-columns"></i>Dashboard</a>
   <a class="links" href="/retrieveMessages"><i class="fa-solid fa-envelope"></i>Messages</a>
 <!--  <a href="/retrieveResumes">View job applications</a>-->
-  <a class="links" href="/createJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
+  <a class="links" href="/retrieveJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
 <!--  <a href="/retrieveJobPositions">View job positions</a>-->
-  <a class="links" href="/usersOverview"><i class="fa-solid fa-users"></i>User management</a>
-  <a class="links" href="/createProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
+  <a class="links" href="/retrieveUsers"><i class="fa-solid fa-users"></i>User management</a>
+  <a class="links" href="/retrieveProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
 <!--  <a href="/retrieveProducts">View Products</a>-->
 </div>
+
+
 
 
 <div id="main">
@@ -32,6 +34,80 @@
   <p>There are {{ count }} products.</p>
   {% endif %}
 </div>
+    <!-- Earnings (Monthly) Card Example -->
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Amount of Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Annual) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                NO. of staff</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ staff_count }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-unlock-keyhole fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Earnings (Annual) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                NO. of customer</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ customer_count }}</div>
+
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-brands fa-intercom fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       <!-- Earnings (Annual) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Active Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_count }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-signal text-success fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 <div class="container-sm d-flex justify-content-center" style="padding-bottom: 3rem">
   <table class="table table-striped">
     <thead>
