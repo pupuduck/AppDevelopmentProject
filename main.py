@@ -568,7 +568,6 @@ def create_job_positions():
 
         job_position = JobPositions(create_job_positions_form.job_name.data,
                                     create_job_positions_form.job_availability.data,
-                                    create_job_positions_form.job_requirements.data,
                                     create_job_positions_form.job_responsibility.data,
                                     create_job_positions_form.job_salary.data,
                                     random_hex)
@@ -683,7 +682,6 @@ def update_jobpositions(id):
         job_positions = job_positions_dict.get(id)
         job_positions.set_job_name(update_job_positions_form.job_name.data)
         job_positions.set_job_availability(update_job_positions_form.job_availability.data)
-        job_positions.set_job_requirements(update_job_positions_form.job_requirements.data)
         job_positions.set_job_responsibility(update_job_positions_form.job_responsibility.data)
         job_positions.set_job_salary(update_job_positions_form.job_salary.data)
 
@@ -700,8 +698,6 @@ def update_jobpositions(id):
         job_positions = job_positions_dict.get(id)
         update_job_positions_form.job_name.data = job_positions.get_job_name()
         update_job_positions_form.job_availability.data = job_positions.get_job_availability()
-
-        update_job_positions_form.job_requirements.data = job_positions.get_job_requirements()
         update_job_positions_form.job_responsibility.data = job_positions.get_job_responsibility()
         update_job_positions_form.job_salary.data = job_positions.get_job_salary()
 
