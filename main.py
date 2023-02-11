@@ -394,7 +394,8 @@ def massAccount(amount):
         else:
             db['customer'] = cust_dict
         for i in range(amount):
-            Admin = User(f"test{i+1}", f"test{i+1}@gmail.com", "TESTTEST", i+1, 'Customer', "Active")
+            Admin = User(f"test{i+1}", f"test{i+1}@gmail.com", "TESTTEST", i+1, 'Admin', "Active")
+
             cust_dict[Admin.get_id()] = Admin
             db['customer'] = cust_dict
         db.close()
