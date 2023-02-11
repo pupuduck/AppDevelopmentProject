@@ -3,6 +3,11 @@
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="/static/css/sidebar.css">
+<link rel="stylesheet" href="/static/css/CRUD.css">
+
+<div class="container w-50 p-5">
+
 <h1 class="display-4">Update Job Positions</h1>
 
 <form method="POST" action="">
@@ -20,6 +25,7 @@
   </div>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+</div>
 {% endblock %}
 
 
