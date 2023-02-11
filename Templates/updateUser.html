@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Dr. Donuts{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/sidebar.css">
+<link rel="stylesheet" href="/static/css/CRUD.css">
+
+<div class="container w-50 p-5">
+
+<h1 class="display-4">Update User</h1>
+    <form method="POST" action="">
+      <div class="form-group">
+        {{ form.username.label( class="label") }}
+        {{ form.username(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.email.label( class="label") }}
+        {{ form.email(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.status.label( class="label") }}
+        {{ form.status(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.role.label( class="label") }}
+        {{ form.role(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.submit1(class="btn btn-primary") }}
+      </div>
+
+    </form>
+</div>
+
+{% endblock %}

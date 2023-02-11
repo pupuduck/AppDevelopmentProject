@@ -394,7 +394,7 @@ def massAccount(amount):
         else:
             db['customer'] = cust_dict
         for i in range(amount):
-            Admin = User(f"test{i+1}", f"test{i+1}@gmail.com", "TESTTEST", i+1, 'Admin', "Active")
+            Admin = User(f"test{i+1}", f"test{i+1}@gmail.com", "TESTTEST", int(i+1), 'Admin', "Active")
 
             cust_dict[Admin.get_id()] = Admin
             db['customer'] = cust_dict
@@ -433,6 +433,53 @@ def retrieve_users():
         print(f"unknown error occurred as {ex}")
 
     return render_template('retrieveUsers.html', count=len(users_list), users_list=users_list, staff_count=len(staff_list), customer_count=len(customer_list), active_count=len(active_list))
+
+
+@app.route('/updateUser/<int:user_id>/', methods=['GET', 'POST'])
+def update_user(user_id):
+    update_profile_form = UpdateProfileForm()
+    if request.method == 'POST':
+        users_dict = {}
+        try:
+            db = shelve.open('DB/Customer/customer')
+            if 'customer' in db:
+                users_dict = db['customer']
+            else:
+                db['customer'] = users_dict
+            user = users_dict.get(str(user_id))
+            user.set_username(update_profile_form.username.data)
+            user.set_email(update_profile_form.email.data)
+            user.set_status(update_profile_form.status.data)
+            user.set_role(update_profile_form.role.data)
+            db['customer'] = users_dict
+            db.close()
+            flash(f'Account updated!', category='alert-success')
+        except IOError:
+            print("IOError")
+        except Exception as ex:
+            print(f"Exception Error as {ex}")
+
+        return redirect(url_for('retrieve_users'))
+    else:
+        users_dict = {}
+        try:
+            db = shelve.open('DB/Customer/customer')
+            if 'customer' in db:
+                users_dict = db['customer']
+            else:
+                db['customer'] = users_dict
+            user = users_dict.get(str(user_id))
+            update_profile_form.username.data = user.get_username()
+            update_profile_form.email.data = user.get_email()
+            update_profile_form.status.data = user.get_status()
+            update_profile_form.role.data = user.get_role()
+            db.close()
+        except IOError:
+            print("IOError")
+        except Exception as ex:
+            print(f"Exception Error as {ex}")
+
+    return render_template('updateUser.html', form=update_profile_form)
 
 
 @app.route('/deleteUsers/<int:user_id>', methods=['POST'])

@@ -5,7 +5,16 @@
 <link rel="stylesheet" href="../static/css/sidebar.css">
 <link rel="stylesheet" href="../static/css/CRUD.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+            <div class="alert {{category}} alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 <div id="mySidebar" class="sidebar">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <p class="text-center p-3"><img src="/static/images/TheLogo.png" alt="" style="width: 70px;, height: 70px;"></p>
@@ -147,7 +156,7 @@
                 {{ user.get_status() }}
 
             </td>
-        <td><a href="/updateUsers/{{user.get_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
+        <td><a href="{{url_for('update_user', user_id=user.get_id())}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
           <form action="{{url_for('delete_user', user_id=user.get_id())}}" method="POST">
 <!-- Button to Open the Modal -->
