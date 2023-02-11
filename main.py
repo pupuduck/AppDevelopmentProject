@@ -531,6 +531,7 @@ def create_resumes():
 
         try:
             resumes_dict = db['Resumes']
+
         except:
             print("Error in retrieving Resumes from Resumes.db.")
 
@@ -796,7 +797,6 @@ def display_product():
 
 @app.route('/retrieveProducts')
 def retrieve_product():
-    update_product_form = CreateProductForm()
     products_dict = {}
     db = shelve.open('DB/Product/product', 'r')
     products_dict = db['Products']
@@ -807,25 +807,33 @@ def retrieve_product():
         product = products_dict.get(key)
         products_list.append(product)
 
-    return render_template('retrieveProducts.html', count=len(products_list), products_list=products_list, form=update_product_form)
+    return render_template('retrieveProducts.html', count=len(products_list), products_list=products_list)
 
 
 @app.route('/updateProducts/<int:id>/', methods=['GET', 'POST'])
 def update_product(id):
     update_product_form = CreateProductForm()
-    if request.method == 'POST' and update_product_form.validate():
+    if request.method == 'POST':
+        print(update_product_form.Image.data)
         products_dict = {}
-        db = shelve.open('DB/Product/product', 'w')
-        products_dict = db['Products']
+        try:
+            db = shelve.open('DB/Product/product')
+            if 'Products' in db:
+                products_dict = db['Products']
+            else:
+                db['Products'] = products_dict
 
-        product = products_dict.get(id)
-        product.set_name(update_product_form.Name.data)
-        product.set_rating(update_product_form.Rating.data)
-        product.set_description(update_product_form.Description.data)
-        product.set_price(round(update_product_form.Price.data, 2))
-
-        db['Products'] = products_dict
-        db.close()
+            product = products_dict.get(id)
+            product.set_name(update_product_form.Name.data)
+            product.set_rating(update_product_form.Rating.data)
+            product.set_description(update_product_form.Description.data)
+            product.set_price(round(update_product_form.Price.data, 2))
+            db['Products'] = products_dict
+            db.close()
+        except IOError:
+            print("IOError")
+        except Exception as ex:
+            print(f"Exception Error as {ex}")
 
         return redirect(url_for('retrieve_product'))
     else:

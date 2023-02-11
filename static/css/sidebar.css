@@ -25,8 +25,7 @@
 .links{
   padding: 16px 32px 16px 32px;
  }
-i{
-padding-right: 1rem}
+
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover {
   background-color: #f1f1f1;
