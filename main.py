@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm, UpdatePasswordForm, CreditCardForm
 from models.auth.user import User
@@ -10,6 +10,7 @@ from models.hiring.resume import Resumes
 from models.hiring.jobPositions import JobPositions
 from models.products.productForm import CreateProductForm
 from models.products.product import Product
+from chat import get_response
 from PIL import Image
 import secrets
 import shelve
@@ -910,6 +911,18 @@ def delete_product(id):
     db.close()
 
     return redirect(url_for('retrieve_product'))
+
+@app.get("/")
+def index_get():
+    return render_template("base.html")
+
+
+@app.post("/predict")
+def predict():
+    text = request.get_json().get("message")
+    response = get_response(text)
+    message = {"answer": response}
+    return jsonify(message)
 
 
 if __name__ == '__main__':
