@@ -32,15 +32,16 @@
           <a class="nav-link mx-2" href="/admin">Admin</a>
         </li>
         {% endif %}
+
           <li class="nav-item dropdown">
-          <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-user"></i>
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/update">Edit Profile</a></li>
-            <li><a class="dropdown-item" href="/logout">Log out</a></li>
-          </ul>
-        </li>
+            <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-user"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="/update">Edit Profile</a></li>
+              <li><a class="dropdown-item" href="/logout">Log out</a></li>
+            </ul>
+          </li>
         {% else %}
         <li class="nav-item">
           <a class="nav-link mx-2" href="/login">Log in</a>
