@@ -10,7 +10,7 @@ from models.hiring.resume import Resumes
 from models.hiring.jobPositions import JobPositions
 from models.products.productForm import CreateProductForm
 from models.products.product import Product
-from chat import get_response
+from models.cust.chat import get_response
 from PIL import Image
 import secrets
 import shelve
