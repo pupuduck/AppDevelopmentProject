@@ -1,9 +1,10 @@
 class cartItems:
-    def __init__(self, product, quantity, price, item_id):
+    def __init__(self, product, quantity, price, item_id, cart_id):
         self.__product = product
         self.__quantity = quantity
         self.__price = price
         self.__item_id = item_id
+        self.__cart_id = cart_id
 
     def set_product(self, product):
         self.__product = product
@@ -17,6 +18,9 @@ class cartItems:
     def set_item_id(self, item_id):
         self.__item_id = item_id
 
+    def set_cart_id(self, cart_id):
+        self.__cart_id = cart_id
+
     def get_product(self):
         return self.__product
 
@@ -28,3 +32,6 @@ class cartItems:
 
     def get_item_id(self):
         return self.__item_id
+
+    def get_cart_id(self):
+        return self.__cart_id

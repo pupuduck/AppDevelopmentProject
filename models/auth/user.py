@@ -14,7 +14,7 @@ class User(UserMixin):
         self.__image = None
         self.__status = status
         self.__payment_methods = []
-        self.__cart = None
+        self.__cart = []
 
     def set_username(self, username):
         self.__username = username

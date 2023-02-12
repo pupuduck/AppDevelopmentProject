@@ -8,9 +8,10 @@ from models.cust.contactForm import CreateMessageForm
 from models.hiring.hiringForm import CreateResumesForm, CreateJobPositionsForm
 from models.hiring.resume import Resumes
 from models.hiring.jobPositions import JobPositions
-from models.products.productForm import CreateProductForm
+from models.products.productForm import CreateProductForm, AddToCart
 from models.products.product import Product
 from models.cust.chat import get_response
+from models.products.cart import cartItems
 from PIL import Image
 import secrets
 import shelve
@@ -830,6 +831,7 @@ def create_products():
 
 @app.route('/products')
 def display_product():
+    add_to_cart = AddToCart()
     products_dict = {}
     db = shelve.open('DB/Product/product', 'r')
     products_dict = db['Products']
@@ -840,7 +842,7 @@ def display_product():
         product = products_dict.get(key)
         products_list.append(product)
 
-    return render_template('products.html', count=len(products_list), products_list=products_list)
+    return render_template('products.html', count=len(products_list), products_list=products_list, form=add_to_cart)
 
 
 @app.route('/retrieveProducts')
@@ -856,6 +858,52 @@ def retrieve_product():
         products_list.append(product)
 
     return render_template('retrieveProducts.html', count=len(products_list), products_list=products_list)
+
+
+@app.route('/addToCart/<int:product_id>', methods=['GET', 'POST'])
+def add_cart(product_id):
+    add_to_cart = AddToCart()
+    user_dict = {}
+    product_dict ={}
+    if request.method == "POST":
+        try:
+            db = shelve.open('DB/Customer/customer')
+            if 'customer' in db:
+                user_dict = db['customer']
+            else:
+                db['customer'] = user_dict
+
+            user = user_dict.get(current_user.get_id())
+            cart = user.get_cart()
+
+            db2 = shelve.open('DB/Product/product')
+            if 'Products' in db2:
+                product_dict = db2['Products']
+            else:
+                db2['Products'] = product_dict
+
+            cart_id = len(cart) + 1
+            print(user_dict)
+            print(product_dict)
+            print(product_id)
+            product = product_dict.get(product_id)
+
+            cart_item = cartItems(product.get_name(), add_to_cart.Quantity.data, product.get_price(), product_id, cart_id)
+            cart.append(cart_item)
+            print(cart)
+            print(cart[1].get_quantity())
+            user.set_cart(cart)
+
+            db['customer'] = user_dict
+            db.close()
+            db2.close()
+            print("item added")
+
+        except IOError:
+            print("IOError")
+        except Exception as ex:
+            print(f"Exception Error as {ex}")
+        return redirect(url_for('display_product'))
 
 
 @app.route('/updateProducts/<int:id>/', methods=['GET', 'POST'])
@@ -911,6 +959,7 @@ def delete_product(id):
     db.close()
 
     return redirect(url_for('retrieve_product'))
+
 
 @app.get("/")
 def index_get():

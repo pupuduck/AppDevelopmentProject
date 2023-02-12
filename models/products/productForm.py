@@ -1,4 +1,5 @@
-from wtforms import StringField, validators, DecimalField, FileField, SubmitField
+from wtforms import StringField, validators, DecimalField, FileField, SubmitField, IntegerField, IntegerRangeField
+from wtforms.validators import DataRequired, Length, EqualTo, Email
 from flask_wtf import FlaskForm
 
 
@@ -9,10 +10,8 @@ class CreateProductForm(FlaskForm):
     Price = DecimalField('Price of product', [validators.DataRequired()], places=2)
     Image = FileField('Image of product', [validators.DataRequired()])
     Submit = SubmitField()
-    # product = StringField('Product name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    # code = StringField('code', [validators.Length(min=8, max=8), validators.DataRequired()])
-    # nutritional = SelectField('nutritional grade', [validators.DataRequired()], choices=[('', 'Select'),
-    # ('A', 'Very healthy'), ('B', 'healthy'), ('c', 'Un-healthy')], default='')
-    # price = DecimalField('price', [validators.DataRequired()], places=2)
 
+
+class AddToCart(FlaskForm):
+    Quantity = IntegerField('Quantity', validators=[DataRequired()])
 

@@ -27,7 +27,42 @@
                     <div class="card-text">Price: ${{ products.get_price() }}</div>
                     <div class="card-text">Rating: {{ products.get_rating() }}/5</div>
                     <div class="card-text">
-                        <a href="login.html" class="btn">Add to cart</a>
+            <form action="{{url_for('add_cart', product_id=products.get_product_id())}}" method="POST">
+                        <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{products.get_product_id()}}">
+                  Add to cart
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal_{{products.get_product_id()}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Add item to cart</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <p>You are adding {{ products.get_name() }} to cart</p>
+
+                              {{ form.Quantity.label( class="form-label") }}
+                              {{ form.Quantity(class="form-control") }}
+
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <input type="submit" value="Add to cart" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+            </form>
                     </div>
                 </div>
 
