@@ -29,15 +29,7 @@
   <button class="openbtn" onclick="openNav()">&#9776;</button>
 <div class="container-fluid w-75">
 <h1 class="display-4">Retrieve Messages</h1>
-<div>
-  {% if count == 0 %}
-  <p>There are no messages.</p>
-  {% elif count == 1 %}
-  <p>There is 1 messages.</p>
-  {% else %}
-  <p>There are {{ count }} messages.</p>
-  {% endif %}
-</div>
+
         <!-- Earnings (Monthly) Card Example -->
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -57,60 +49,7 @@
                             </div>
                         </div>
 
-                        <!-- Earnings (Annual) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                NO. of staff</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ staff_count }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa fa-unlock-keyhole fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                         <!-- Earnings (Annual) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                NO. of customer</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ customer_count }}</div>
-
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-brands fa-intercom fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                       <!-- Earnings (Annual) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                                Active Users</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_count }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-signal text-success fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div> <!-- Earnings (Monthly) Card Example -->
 <div class="" style="padding-bottom: 3rem">
   <table class="table table-striped" id="Mytable">

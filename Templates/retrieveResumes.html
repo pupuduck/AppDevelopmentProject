@@ -28,15 +28,6 @@
   <button class="openbtn" onclick="openNav()">&#9776;</button>
 <div class="container-fluid w-75">
 <h1 class="display-4">Retrieve Resumes</h1>
-<div>
-  {% if count == 0 %}
-  <p>There are no applicants.</p>
-  {% elif count == 1 %}
-  <p>There is 1 applicant.</p>
-  {% else %}
-  <p>There are {{ count }} applicants.</p>
-  {% endif %}
-</div>
         <!-- Earnings (Monthly) Card Example -->
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -45,66 +36,11 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Amount of Users</div>
+                                                Amount of applicants</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Annual) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                NO. of staff</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ staff_count }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa fa-unlock-keyhole fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                         <!-- Earnings (Annual) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                NO. of customer</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ customer_count }}</div>
-
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-brands fa-intercom fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                       <!-- Earnings (Annual) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                                Active Users</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_count }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-signal text-success fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -140,7 +76,6 @@
         <td>{{ resumes.get_contactno() }}</td>
         <td>{{ resumes.get_preferredjob() }}</td>
         <td>{{ resumes.get_uploadfile() }}</td>
-        <td><a href="/updateResumes/{{resumes.get_resumes_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
           <form action="{{url_for('delete_resumes', id=resumes.get_resumes_id())}}" method="POST">
 <!-- Button to Open the Modal -->

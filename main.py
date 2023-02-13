@@ -58,9 +58,11 @@ def load_user(user_id):
 def home():
     return render_template('home.html')
 
+
 @app.route('/aboutus')
 def aboutus():
     return render_template('aboutus.html')
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -365,24 +367,7 @@ def delete():
 
 @app.route('/admin', methods=["GET"])
 def adminPage():
-    try:
-        product_list = []
-        db = shelve.open('DB/Product/product')
-        product_dict = {}
-        if 'customer' in db:
-            product_dict = db['Products']
-        else:
-            db['Products'] = product_dict
-
-        for items in product_dict:
-            product_list.append(items)
-
-        db.close()
-    except IOError:
-        print("Error IO Error")
-    except Exception as ex:
-        print(f"unknown error occurred as {ex}")
-    return render_template('admin.html', )
+    return render_template('admin.html')
 
 
 def createStaff():
@@ -701,49 +686,6 @@ def display_jobpositions():
     return render_template('displayJobPositions.html', count=len(job_positions_list), jobpositions_list=job_positions_list)
 
 
-@app.route('/updateResumes/<int:id>/', methods=['GET', 'POST'])
-def update_resumes(id):
-    update_resumes_form = CreateResumesForm(request.form)
-    if request.method == 'POST' and update_resumes_form.validate():
-        resumes_dict = {}
-        db = shelve.open('DB/Hiring/resume')
-        resumes_dict = db['Resumes']
-
-        resumes = resumes_dict.get(id)
-        resumes.set_first_name(update_resumes_form.first_name.data)
-        resumes.set_last_name(update_resumes_form.last_name.data)
-        resumes.set_email(update_resumes_form.email.data)
-        resumes.set_sgorpr(update_resumes_form.sgorpr.data)
-        resumes.set_citizenship(update_resumes_form.citizenship.data)
-        resumes.set_address(update_resumes_form.address.data)
-        resumes.set_contactno(update_resumes_form.contactno.data)
-        resumes.set_preferredjob(update_resumes_form.preferredjob.data)
-        resumes.set_uploadfile(update_resumes_form.uploadfile.data)
-
-        db['Resumes'] = resumes_dict
-        db.close()
-
-        return redirect(url_for('retrieve_resumes'))
-    else:
-        resumes_dict = {}
-        db = shelve.open('DB/Hiring/resume')
-        resumes_dict = db['Resumes']
-        db.close()
-
-        resumes = resumes_dict.get(id)
-        update_resumes_form.first_name.data = resumes.get_first_name()
-        update_resumes_form.last_name.data = resumes.get_last_name()
-        update_resumes_form.email.data = resumes.get_email()
-        update_resumes_form.sgorpr.data = resumes.get_sgorpr()
-        update_resumes_form.citizenship.data = resumes.get_citizenship()
-        update_resumes_form.address.data = resumes.get_address()
-        update_resumes_form.contactno.data = resumes.get_contactno()
-        update_resumes_form.preferredjob.data = resumes.get_preferredjob()
-        update_resumes_form.uploadfile.data = resumes.get_uploadfile()
-
-        return render_template('updateResumes.html', form=update_resumes_form)
-
-
 @app.route('/updateJobPositions/<int:id>/', methods=['GET', 'POST'])
 def update_jobpositions(id):
     update_job_positions_form = CreateJobPositionsForm()
@@ -863,7 +805,6 @@ def display_product():
     db = shelve.open('DB/Product/product', 'r')
     products_dict = db['Products']
     db.close()
-
     products_list = []
     for key in products_dict:
         product = products_dict.get(key)
