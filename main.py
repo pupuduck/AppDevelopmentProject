@@ -864,7 +864,7 @@ def retrieve_product():
 def add_cart(product_id):
     add_to_cart = AddToCart()
     user_dict = {}
-    product_dict ={}
+    product_dict = {}
     if request.method == "POST":
         try:
             db = shelve.open('DB/Customer/customer')
@@ -884,7 +884,7 @@ def add_cart(product_id):
 
             cart_id = len(cart) + 1
             product = product_dict.get(product_id)
-            cart_item = cartItems(product.get_name(), add_to_cart.Quantity.data, product.get_price(), product_id, cart_id)
+            cart_item = cartItems(product.get_name(), add_to_cart.Quantity.data, product.get_price(), product_id, cart_id, product.get_image())
             cart.append(cart_item)
             user.set_cart(cart)
             db['customer'] = user_dict
@@ -970,7 +970,39 @@ def update_product(id):
         return render_template('updateProducts.html', form=update_product_form)
 
 
-@app.route('/deleteProduct/<int:id>', methods=['POST'])
+@app.route('/deleteItem/<int:cart_id>/', methods=['GET', 'POST'])
+def delete_item(cart_id):
+    try:
+        db = shelve.open('DB/Customer/customer')
+        user_dict = {}
+        if 'customer' in db:
+            user_dict = db['customer']
+        else:
+            db['customer'] = user_dict
+
+        user = user_dict.get(current_user.get_id())
+        cart_list = user.get_cart()
+        for carts in cart_list:
+            if carts.get_cart_id() == cart_id:
+                index = cart_list.index(carts)
+                del cart_list[index]
+
+        user.set_cart(cart_list)
+        user_dict[user.get_id()] = user
+        db['customer'] = user_dict
+        db.close()
+        flash('Item removed', category='alert-danger')
+        return redirect(url_for('cart'))
+
+    except IOError:
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
+
+    return redirect(url_for('cart'))
+
+
+@app.route('/deleteProduct', methods=['POST'])
 def delete_product(id):
     products_dict = {}
     db = shelve.open('DB/Product/product', 'w')
