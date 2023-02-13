@@ -186,9 +186,9 @@ def create_staff():
                 cust_dict[c1.get_id()] = c1
                 db['customer'] = cust_dict
                 db.close()
-                flash(f'Account successfully created. Welcome {c1.get_username()}', category='alert-success')
+                flash(f'Admin account successfully created.', category='alert-success')
                 print(f"Account created, id = {user_id}")
-                return redirect(url_for('login'))
+                return redirect(url_for('retrieve_users'))
         except IOError:
             print("Error IO Error")
         except Exception as ex:
@@ -781,7 +781,7 @@ def delete_resumes(id):
 
     db['Resumes'] = resumes_dict
     db.close()
-    flash("Job deleted", category='alert-success')
+    flash("Resume deleted!", category='alert-success')
     return redirect(url_for('retrieve_resumes'))
 
 
@@ -794,7 +794,7 @@ def delete_jobpositions(id):
 
     db['JobPositions'] = jobpositions_dict
     db.close()
-
+    flash("Job deleted!", category='alert-success')
     return redirect(url_for('retrieve_jobpositions'))
 
 
@@ -965,6 +965,7 @@ def cart():
             subtotal += items.get_total_item_price()
 
         total = float(subtotal) + 2.99
+        total = "{:.2f}".format(total)
 
     except IOError:
         print("IOError")
