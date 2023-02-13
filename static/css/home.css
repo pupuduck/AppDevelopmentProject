@@ -1355,7 +1355,17 @@ section {
     font-size: 14px;
   }
 }
-img{
+#tony{
+height:100px;
+width:100px;
+border-radius:100%;
+}
+#jonjones{
+height:100px;
+width:100px;
+border-radius:100%;
+}
+#islam{
 height:100px;
 width:100px;
 border-radius:100%;
