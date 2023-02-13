@@ -2,26 +2,51 @@
 {% block title %}Dr. Donuts{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="../static/css/sidebar.css">
+<link rel="stylesheet" href="/static/css/sidebar.css">
 <div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <p class="text-center p-3"><img src="/static/images/TheLogo.png" alt="" style="width: 70px;, height: 70px;"></p>
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <p class="text-center p-3"><img src="/static/images/TheLogo.png" alt="" style="width: 70px;, height: 70px;"></p>
 
-  <a class="links" href="/admin"><i class="fa-solid fa-table-columns"></i>Dashboard</a>
-  <a class="links" href="/retrieveMessages"><i class="fa-solid fa-envelope"></i>Messages</a>
-<!--  <a href="/retrieveResumes">View job applications</a>-->
-  <a class="links" href="/retrieveJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
-<!--  <a href="/retrieveJobPositions">View job positions</a>-->
-  <a class="links" href="/retrieveUsers"><i class="fa-solid fa-users"></i>User management</a>
-  <a class="links" href="/retrieveProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
+    <a class="links" href="/admin"><i class="fa-solid fa-table-columns"></i>Dashboard</a>
+    <a class="links" href="/retrieveMessages"><i class="fa-solid fa-envelope"></i>Messages</a>
+    <!--  <a href="/retrieveResumes">View job applications</a>-->
+    <a class="links" href="/retrieveJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
+    <!--  <a href="/retrieveJobPositions">View job positions</a>-->
+    <a class="links" href="/retrieveUsers"><i class="fa-solid fa-users"></i>User management</a>
+    <a class="links" href="/retrieveProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
+    <a class="links" href="/retrieveReports"><i class="fa-solid fa-file"></i>Report generation</a>
+        <a class="links" href="/createReport"><i class="fa-solid fa-plus"></i>Create report</a>
+    <a class="links" href="/retrieveResumes"><i class="fa-solid fa-clipboard"></i>Job applications</a>
 <!--  <a href="/retrieveProducts">View Products</a>-->
 </div>
-
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 
 <div id="main">
   <button class="openbtn" onclick="openNav()">&#9776;</button>
 
 </div>
+<div class="container w-75">
+        <h1 style="text-align: center; color: pink">CHARTS</h1>
+    <div class="row justify-content-center">
+    <div class="" id="reportchart1" style="width: 480px; height: 400px;"></div>
+    <script>
+      Plotly.newPlot('reportchart1', [{
+        x: ['Chocolate', 'Cinnamon', 'Matcha', 'Strawberry Frosted', 'Mr Happy'],
+        y: [50, 20, 15, 40, 25],
+        type: 'bar'
+      }]);
+    </script>
+        <div class="" id="reportchart2" style="width: 480px; height: 400px;"></div>
+    <script>
+      Plotly.newPlot('reportchart2', [{
+        x: ['John', 'Sam', 'Jack', 'Sally', 'Jane'],
+        y: [20, 15, 15, 25, 30],
+        type: 'bar'
+      }]);
+    </script>
+        </div>
+</div>
+
 <script src="../static/javascript/sidebar.js"></script>
 {% endblock %}

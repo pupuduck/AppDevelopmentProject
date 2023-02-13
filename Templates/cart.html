@@ -167,7 +167,8 @@
 <script>
 button = document.getElementById('checkoutButton')
 cart_count = {{ cart_count }}
-if (cart_count == 0){
+card_count = {{ card_count }}
+if (cart_count == 0 || card_count == 0){
   button.disabled = true;
   button.style.color = "black";
   console.log('0');

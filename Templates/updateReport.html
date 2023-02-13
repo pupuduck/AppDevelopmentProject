@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Dr. Donuts{% endblock %}
+{% block title %}Library Loan System - Update Report{% endblock %}
 
 {% block content %}
+{% from "includes/_formHelper.html" import render_field %}
 <link rel="stylesheet" href="/static/css/sidebar.css">
 <link rel="stylesheet" href="/static/css/CRUD.css">
 <div id="mySidebar" class="sidebar">
@@ -22,36 +23,28 @@
 </div>
 <div id="main">
   <button class="openbtn" onclick="openNav()">&#9776;</button>
-<div class="container w-50 p-5">
+<h1 class="display-4">Update Donut Report</h1>
 
-<h1 class="display-4">Update Product </h1>
-    <form method="post" enctype="multipart/form-data">
-      <div class="form-group">
-        {{ form.Name.label( class="form-label")}}
-        {{ form.Name(class="form-control") }}
-      </div>
-      <div class="form-group">
-        {{ form.Rating.label( class="form-label")}}
-        {{ form.Rating(class="form-control") }}
-      </div>
-      <div class="form-group">
-        {{ form.Description.label( class="form-label")}}
-        {{ form.Description(class="form-control") }}
-      </div>
-      <div class="form-group">
-        {{ form.Price.label( class="form-label")}}
-        {{ form.Price(class="form-control") }}
-      </div>
-      <div class="form-group">
-        {{ form.Image.label( class="form-label") }}
-        {{ form.Image(class="form-control") }}
-      </div>
-      <div class="form-group">
-        {{form.Submit(class="btn btn-primary")}}
-      </div>
-
-    </form>
+<form method="POST" action="">
+  <div class="form-group">
+    {{ render_field(form.first_name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.last_name, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.gender, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.membership, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div id="prof">
+    <div class="form-group">
+      {{ render_field(form.remarks, class="form-control") }}
+    </div>
+  </div>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
 </div>
-</div>
-<script src="../static/javascript/sidebar.js"></script>
+  <script src="/static/javascript/sidebar.js"></script>
 {% endblock %}

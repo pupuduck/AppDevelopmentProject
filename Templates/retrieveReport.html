@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Reports{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/sidebar.css">
+<link rel="stylesheet" href="/static/css/CRUD.css">
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <p class="text-center p-3"><img src="/static/images/TheLogo.png" alt="" style="width: 70px;, height: 70px;"></p>
+
+    <a class="links" href="/admin"><i class="fa-solid fa-table-columns"></i>Dashboard</a>
+    <a class="links" href="/retrieveMessages"><i class="fa-solid fa-envelope"></i>Messages</a>
+    <!--  <a href="/retrieveResumes">View job applications</a>-->
+    <a class="links" href="/retrieveJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
+    <!--  <a href="/retrieveJobPositions">View job positions</a>-->
+    <a class="links" href="/retrieveUsers"><i class="fa-solid fa-users"></i>User management</a>
+    <a class="links" href="/retrieveProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
+    <a class="links" href="/retrieveReports"><i class="fa-solid fa-file"></i>Report generation</a>
+    <a class="links" href="/createReport"><i class="fa-solid fa-plus"></i>Create report</a>
+    <a class="links" href="/retrieveResumes"><i class="fa-solid fa-clipboard"></i>Job applications</a>
+<!--  <a href="/retrieveProducts">View Products</a>-->
+</div>
+<div id="main">
+<button class="openbtn" onclick="openNav()">&#9776;</button>
+<div class="container-fluid w-75">
+<h1 class="display-4">Retrieve Donut Reports</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no donuts sold.</p>
+  {% elif count == 1 %}
+  <p>There is 1 donut sold.</p>
+  {% else %}
+  <p>There are {{ count }} donuts sold.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Report ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>Position</th>
+        <th>Donut type sold</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for report in reports_list %}
+     <tr>
+        <td>{{ report.get_report_id() }}</td>
+        <td>{{ report.get_first_name() }}</td>
+        <td>{{ report.get_last_name() }}</td>
+        <td>{{ report.get_gender() }}</td>
+        {% if report.get_membership() == "W" %}
+        <td>Worker</td>
+        {% elif report.get_membership() == "M" %}
+        <td>Manager</td>
+        {% elif report.get_membership() == "H" %}
+        <td>Head</td>
+        {% endif %}
+        <td>{{ report.get_remarks() }}</td>
+        <td><a href="/updateReport/{{report.get_report_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_report', id=report.get_report_id())}}" method="POST">
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{report.get_report_id()}}">
+  Delete
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal_{{report.get_report_id()}}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Confirmation</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to delete {{report.get_first_name()}} {{report.get_last_name()}}?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <input type="submit" value="Delete" class="btn btn-danger">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+          </form>
+        </td>
+     </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+<script src="../static/javascript/sidebar.js"></script>
+{% endblock %}

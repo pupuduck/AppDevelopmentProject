@@ -3,7 +3,26 @@
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="/static/css/sidebar.css">
+<link rel="stylesheet" href="/static/css/CRUD.css">
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <p class="text-center p-3"><img src="/static/images/TheLogo.png" alt="" style="width: 70px;, height: 70px;"></p>
 
+    <a class="links" href="/admin"><i class="fa-solid fa-table-columns"></i>Dashboard</a>
+    <a class="links" href="/retrieveMessages"><i class="fa-solid fa-envelope"></i>Messages</a>
+    <!--  <a href="/retrieveResumes">View job applications</a>-->
+    <a class="links" href="/retrieveJobPositions"><i class="fa-solid fa-broom"></i>Job positions</a>
+    <!--  <a href="/retrieveJobPositions">View job positions</a>-->
+    <a class="links" href="/retrieveUsers"><i class="fa-solid fa-users"></i>User management</a>
+    <a class="links" href="/retrieveProducts"><i class="fa-solid fa-warehouse"></i>Inventory</a>
+    <a class="links" href="/retrieveReports"><i class="fa-solid fa-file"></i>Report generation</a>
+    <a class="links" href="/createReport"><i class="fa-solid fa-plus"></i>Create report</a>
+    <a class="links" href="/retrieveResumes"><i class="fa-solid fa-clipboard"></i>Job applications</a>
+<!--  <a href="/retrieveProducts">View Products</a>-->
+</div>
+<div id="main">
+  <button class="openbtn" onclick="openNav()">&#9776;</button>
 <h1 class="display-4">Create Resume</h1>
 <link rel="stylesheet" href="../static/css/dragdrop.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -39,4 +58,6 @@
   <br>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+    </div>
+<script src="/static/javascript/sidebar.js"></script>
 {% endblock %}

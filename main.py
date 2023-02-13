@@ -13,6 +13,8 @@ from models.products.product import Product
 from models.cust.chat import get_response
 from models.products.cart import cartItems
 from models.auth.transaction_history import transactionHistory
+from models.report.report import Report
+from models.report.reportForm import CreateReportForm
 from PIL import Image
 import secrets
 import shelve
@@ -363,7 +365,24 @@ def delete():
 
 @app.route('/admin', methods=["GET"])
 def adminPage():
-    return render_template('admin.html')
+    try:
+        product_list = []
+        db = shelve.open('DB/Product/product')
+        product_dict = {}
+        if 'customer' in db:
+            product_dict = db['Products']
+        else:
+            db['Products'] = product_dict
+
+        for items in product_dict:
+            product_list.append(items)
+
+        db.close()
+    except IOError:
+        print("Error IO Error")
+    except Exception as ex:
+        print(f"unknown error occurred as {ex}")
+    return render_template('admin.html', )
 
 
 def createStaff():
@@ -1092,6 +1111,102 @@ def predict():
     response = get_response(text)
     message = {"answer": response}
     return jsonify(message)
+
+
+# report generation
+@app.route('/createReport', methods=['GET', 'POST'])
+def create_report():
+    create_report_form = CreateReportForm(request.form)
+    if request.method == 'POST' and create_report_form.validate():
+        reports_dict = {}
+        db = shelve.open('DB/Report/report.db', 'c')
+
+        try:
+            reports_dict = db['Reports']
+        except:
+            print("Error in retrieving Reports from report.db.")
+
+        report = Report.Report(create_report_form.first_name.data, create_report_form.last_name.data, create_report_form.gender.data, create_report_form.membership.data, create_report_form.remarks.data)
+        reports_dict[report.get_report_id()] = report
+        db['Reports'] = reports_dict
+
+        db.close()
+
+        return redirect(url_for('retrieve_reports'))
+    return render_template('createReport.html', form=create_report_form)
+
+
+@app.route('/retrieveReports')
+def retrieve_reports():
+    reports_dict = {}
+    reports_list = []
+    try:
+        db = shelve.open('DB/Report/report', 'r')
+        if 'Reports' in db:
+            reports_dict = db['Reports']
+        else:
+            db['Reports'] = reports_dict
+
+        db.close()
+
+        reports_list = []
+
+        for key in reports_dict:
+            report = reports_dict.get(key)
+            reports_list.append(report)
+    except:
+        print('error')
+
+    return render_template('retrieveReport.html', count=len(reports_list), reports_list=reports_list)
+
+
+@app.route('/updateReport/<int:id>/', methods=['GET', 'POST'])
+def update_report(id):
+    update_report_form = CreateReportForm(request.form)
+    if request.method == 'POST' and update_report_form.validate():
+        reports_dict = {}
+        db = shelve.open('DB/Report/report', 'w')
+        reports_dict = db['Reports']
+
+        report = reports_dict.get(id)
+        report.set_first_name(update_report_form.first_name.data)
+        report.set_last_name(update_report_form.last_name.data)
+        report.set_gender(update_report_form.gender.data)
+        report.set_membership(update_report_form.membership.data)
+        report.set_remarks(update_report_form.remarks.data)
+
+        db['Reports'] = reports_dict
+        db.close()
+
+        return redirect(url_for('retrieve_reports'))
+    else:
+        reports_dict = {}
+        db = shelve.open('report.db', 'r')
+        reports_dict = db['Reports']
+        db.close()
+
+        report = reports_dict.get(id)
+        update_report_form.first_name.data = report.get_first_name()
+        update_report_form.last_name.data = report.get_last_name()
+        update_report_form.gender.data = report.get_gender()
+        update_report_form.membership.data = report.get_membership()
+        update_report_form.remarks.data = report.get_remarks()
+
+        return render_template('updateReport.html', form=update_report_form)
+
+
+@app.route('/deleteReport/<int:id>', methods=['POST'])
+def delete_report(id):
+    reports_dict = {}
+    db = shelve.open('DB/Report/report', 'w')
+    reports_dict = db['Reports']
+
+    reports_dict.pop(id)
+
+    db['Reports'] = reports_dict
+    db.close()
+
+    return redirect(url_for('retrieve_reports'))
 
 
 if __name__ == '__main__':
