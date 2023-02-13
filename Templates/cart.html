@@ -148,11 +148,12 @@
                   <p class="mb-2">Total (shipping included)</p>
                   <p class="mb-2">$ {{total}} </p>
                 </div>
-                <a href="/checkOut">
-                  <button type="button" class="btn btn-primary btn-block btn-lg">
-                      <span>Checkout</span>
+
+                  <button type="button" id="checkoutButton" class="btn btn-primary btn-block btn-lg">
+                    <a href="/checkOut" style="text-decoration: none; color: white;"><span>Checkout</span> </a>
+
                   </button>
-                </a>
+
               </div>
             </div>
 
@@ -163,4 +164,18 @@
     </div>
   </div>
 </section>
+<script>
+button = document.getElementById('checkoutButton')
+cart_count = {{ cart_count }}
+if (cart_count == 0){
+  button.disabled = true;
+  button.style.color = "black";
+  console.log('0');
+  button.classList.add('btn-success');
+}
+else {
+  button.disabled = false
+}
+
+</script>
 {% endblock %}
