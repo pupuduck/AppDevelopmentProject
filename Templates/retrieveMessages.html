@@ -2,6 +2,17 @@
 {% block title %}Dr. Donuts{% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+            <div class="alert {{category}} alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 <link rel="stylesheet" href="../static/css/sidebar.css">
 <link rel="stylesheet" href="../static/css/CRUD.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
@@ -59,7 +70,7 @@
         <th>Email</th>
         <th>Subject</th>
         <th>Message</th>
-        <th>Update</th>
+
         <th>Delete</th>
       </tr>
     </thead>
@@ -70,7 +81,6 @@
         <td>{{ message.get_email() }}</td>
         <td>{{ message.get_subject() }}</td>
         <td>{{ message.get_message() }}</td>
-         <td><a href="/updateUser/{{message.get_message_id()}}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
         <td>
           <form action="{{url_for('delete_message', id=message.get_message_id())}}" method="POST">
 <!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{message.get_subject()}} ?');">-->

@@ -2,7 +2,16 @@
 {% block title %}Dr. Donuts{% endblock %}
 
 {% block content %}
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+            <div class="alert {{category}} alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 <link rel="stylesheet" href="../static/css/sidebar.css">
 <link rel="stylesheet" href="../static/css/CRUD.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">

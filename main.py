@@ -149,6 +149,53 @@ def register():
     return render_template('register.html', form=register_form, error=error)
 
 
+@app.route('/createAdmin', methods=['POST', 'GET'])
+def create_staff():
+    register_form = RegisterForm()
+    error = None
+    if request.method == "POST":
+        username = register_form.username.data
+        email = register_form.email.data
+        password = register_form.password1.data
+        password1 = register_form.password2.data
+
+        cust_dict = {}
+        try:
+            db = shelve.open('DB/Customer/customer')
+            if 'customer' in db:
+                cust_dict = db['customer']
+            else:
+                db['customer'] = cust_dict
+            email_list = []
+            username_list = []
+            for objects in cust_dict.values():
+                email_list.append(objects.get_email())
+                username_list.append(objects.get_username())
+            if username in username_list and email in email_list:
+                error = "Both username and email are already taken"
+            elif email in email_list:
+                error = "Email is already taken"
+            elif username in username_list:
+                error = "Username is already taken"
+            elif password != password1:
+                error = "Passwords do not match"
+            else:
+                current_GMT = time.gmtime()
+                user_id = int(calendar.timegm(current_GMT))
+                c1 = User(username, email, password, user_id, 'Admin', 'Active')
+                cust_dict[c1.get_id()] = c1
+                db['customer'] = cust_dict
+                db.close()
+                flash(f'Account successfully created. Welcome {c1.get_username()}', category='alert-success')
+                print(f"Account created, id = {user_id}")
+                return redirect(url_for('login'))
+        except IOError:
+            print("Error IO Error")
+        except Exception as ex:
+            print(f"unknown error occurred as {ex}")
+    return render_template('createStaff.html', form=register_form, error=error)
+
+
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     update_password_form = UpdatePasswordForm()
@@ -507,6 +554,7 @@ def delete_user(user_id):
 
         db['customer'] = users_dict
         db.close()
+        flash('Account successfully deleted!', category='alert-success')
     except IOError:
         print('Error IO error')
 
@@ -574,7 +622,7 @@ def delete_message(id):
 
     db['message'] = message_dict
     db.close()
-
+    flash("Message deleted", category='alert-success')
     return redirect(url_for('retrieveMessages'))
 
 
@@ -706,7 +754,7 @@ def update_jobpositions(id):
         job_positions.set_job_image(random_hex)
         db['JobPositions'] = job_positions_dict
         db.close()
-
+        flash('Job successfully updated!', category='alert-success')
         return redirect(url_for('retrieve_jobpositions'))
     else:
         job_positions_dict = {}
@@ -733,7 +781,7 @@ def delete_resumes(id):
 
     db['Resumes'] = resumes_dict
     db.close()
-
+    flash("Job deleted", category='alert-success')
     return redirect(url_for('retrieve_resumes'))
 
 
@@ -790,6 +838,8 @@ def create_products():
             products_dict[product.get_product_id()] = product
             db['Products'] = products_dict
             db.close()
+            flash('Product created!', category='alert-success')
+            return redirect(url_for('retrieve_product'))
         except IOError:
             print("IOError")
         except Exception as ex:
@@ -851,6 +901,7 @@ def add_cart(product_id):
     add_to_cart = AddToCart()
     user_dict = {}
     product_dict = {}
+    error = None
     if request.method == "POST":
         try:
             db = shelve.open('DB/Customer/customer')
@@ -867,16 +918,19 @@ def add_cart(product_id):
                 product_dict = db2['Products']
             else:
                 db2['Products'] = product_dict
-
-            cart_id = len(cart) + 1
-            product = product_dict.get(product_id)
-            cart_item = cartItems(product.get_name(), add_to_cart.Quantity.data, product.get_price(), product_id, cart_id, product.get_image())
-            cart.append(cart_item)
-            user.set_cart(cart)
-            db['customer'] = user_dict
-            db.close()
-            db2.close()
-            print("item added")
+            if add_to_cart.Quantity.data >= 1:
+                cart_id = len(cart) + 1
+                product = product_dict.get(product_id)
+                cart_item = cartItems(product.get_name(), add_to_cart.Quantity.data, product.get_price(), product_id, cart_id, product.get_image())
+                cart.append(cart_item)
+                user.set_cart(cart)
+                db['customer'] = user_dict
+                db.close()
+                db2.close()
+                print("item added")
+                flash(f'Item added', category='alert-success')
+            else:
+                flash(f'Quantity cannot be less than 1', category='alert-danger')
 
         except IOError:
             print("IOError")
@@ -948,6 +1002,7 @@ def check_out():
         cart_list.clear()
         user.set_cart(cart_list)
         db['customer'] = user_dict
+        flash("Order purchased successfully!")
         print(transaction_history)
         db.close()
 
@@ -1071,14 +1126,14 @@ def create_report():
     create_report_form = CreateReportForm(request.form)
     if request.method == 'POST' and create_report_form.validate():
         reports_dict = {}
-        db = shelve.open('DB/Report/report.db', 'c')
+        db = shelve.open('DB/Report/report', 'c')
 
         try:
             reports_dict = db['Reports']
         except:
             print("Error in retrieving Reports from report.db.")
 
-        report = Report.Report(create_report_form.first_name.data, create_report_form.last_name.data, create_report_form.gender.data, create_report_form.membership.data, create_report_form.remarks.data)
+        report = Report(create_report_form.first_name.data, create_report_form.last_name.data, create_report_form.gender.data, create_report_form.membership.data, create_report_form.remarks.data)
         reports_dict[report.get_report_id()] = report
         db['Reports'] = reports_dict
 
@@ -1133,7 +1188,7 @@ def update_report(id):
         return redirect(url_for('retrieve_reports'))
     else:
         reports_dict = {}
-        db = shelve.open('report.db', 'r')
+        db = shelve.open('DB/Report/report', 'r')
         reports_dict = db['Reports']
         db.close()
 
