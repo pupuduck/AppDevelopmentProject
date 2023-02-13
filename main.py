@@ -984,7 +984,7 @@ def check_out():
 def update_product(id):
     update_product_form = CreateProductForm()
     if request.method == 'POST':
-        print(update_product_form.Image.data)
+
         products_dict = {}
         try:
             db = shelve.open('DB/Product/product')
@@ -993,11 +993,17 @@ def update_product(id):
             else:
                 db['Products'] = products_dict
 
+            image = Image.open(update_product_form.Image.data)
+            random_hex = secrets.token_hex(8)
+            random_hex = "static/donutImages/" + random_hex + ".png"
+            image.save(random_hex)
             product = products_dict.get(id)
+            print(product)
             product.set_name(update_product_form.Name.data)
             product.set_rating(update_product_form.Rating.data)
             product.set_description(update_product_form.Description.data)
             product.set_price(round(update_product_form.Price.data, 2))
+            product.set_image(random_hex)
             db['Products'] = products_dict
             db.close()
         except IOError:
@@ -1017,6 +1023,7 @@ def update_product(id):
         update_product_form.Rating.data = product.get_rating()
         update_product_form.Description.data = product.get_description()
         update_product_form.Price.data = product.get_price()
+        update_product_form.Image.data = product.get_image()
 
         return render_template('updateProducts.html', form=update_product_form)
 
@@ -1053,7 +1060,7 @@ def delete_item(cart_id):
     return redirect(url_for('cart'))
 
 
-@app.route('/deleteProduct', methods=['POST'])
+@app.route('/deleteProduct/<int:id>/', methods=['POST', 'GET'])
 def delete_product(id):
     products_dict = {}
     db = shelve.open('DB/Product/product', 'w')
