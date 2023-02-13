@@ -15,6 +15,7 @@ class User(UserMixin):
         self.__status = status
         self.__payment_methods = []
         self.__cart = []
+        self.__transaction_history = []
 
     def set_username(self, username):
         self.__username = username
@@ -52,6 +53,9 @@ class User(UserMixin):
     def set_cart(self, cart):
         self.__cart = cart
 
+    def set_transaction_history(self, transaction_history):
+        self.__transaction_history = transaction_history
+
     def get_username(self):
         return self.__username
 
@@ -87,3 +91,6 @@ class User(UserMixin):
 
     def get_cart(self):
         return self.__cart
+
+    def get_transaction_history(self):
+        return self.__transaction_history

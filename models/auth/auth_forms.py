@@ -62,3 +62,5 @@ class CreditCardForm(FlaskForm):
     postal_code = StringField('Postal code', validators=[DataRequired(), Length(6)])
     country = CountrySelectField('Country', validators=[DataRequired()])
     unit_number = StringField('Unit number', validators=[DataRequired()])
+
+

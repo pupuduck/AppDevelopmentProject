@@ -12,11 +12,13 @@ from models.products.productForm import CreateProductForm, AddToCart
 from models.products.product import Product
 from models.cust.chat import get_response
 from models.products.cart import cartItems
+from models.auth.transaction_history import transactionHistory
 from PIL import Image
 import secrets
 import shelve
 import calendar
 import time
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -230,9 +232,9 @@ def update():
 
     card_list = current_user.get_payment_methods()
     card_count = len(card_list)
-
+    transaction_history = current_user.get_transaction_history()
     return render_template('update.html', update_form=update_form, update_password_form=update_password_form,
-                           error=error, error2=error2, card_list=card_list, card_count=card_count)
+                           error=error, error2=error2, card_list=card_list, card_count=card_count, transaction_history=transaction_history)
 
 
 # adding payment methods
@@ -580,7 +582,6 @@ def create_resumes():
 
         try:
             resumes_dict = db['Resumes']
-
         except:
             print("Error in retrieving Resumes from Resumes.db.")
 
@@ -906,6 +907,8 @@ def cart():
     card_list = []
     subtotal = 0
     total = 0
+    cart_count = 0
+    card_count = 0
     try:
         db = shelve.open('DB/Customer/customer')
         if 'customer' in db:
@@ -916,6 +919,8 @@ def cart():
         user = user_dict.get(current_user.get_id())
         card_list = user.get_payment_methods()
         cart_list = user.get_cart()
+        cart_count = len(cart_list)
+        card_count = len(card_list)
         subtotal = 0
         for items in cart_list:
             subtotal += items.get_total_item_price()
@@ -926,7 +931,46 @@ def cart():
         print("IOError")
     except Exception as ex:
         print(f"Exception Error as {ex}")
-    return render_template('cart.html', cart_list=cart_list, total=total, subtotal=subtotal, card_list=card_list)
+    return render_template('cart.html', cart_list=cart_list, total=total, subtotal=subtotal, card_list=card_list, card_count=card_count, cart_count=cart_count)
+
+
+@app.route('/checkOut', methods=["GET", "POST"])
+def check_out():
+    try:
+        db = shelve.open('DB/Customer/customer')
+        user_dict = {}
+        if 'customer' in db:
+            user_dict = db['customer']
+        else:
+            db['customer'] = user_dict
+
+        timestamp = time.time()
+        date_time = datetime.fromtimestamp(timestamp)
+        str_date_time = date_time.strftime("%d-%m-%Y, %H:%M:%S")
+        user = user_dict.get(current_user.get_id())
+        transaction_history = user.get_transaction_history()
+        transaction_id = len(transaction_history) + 1
+        cart_list = user.get_cart()
+        subtotal = 0
+        for items in cart_list:
+            subtotal += items.get_total_item_price()
+
+        total = float(subtotal) + 2.99
+        transaction = transactionHistory(transaction_id, str_date_time, total)
+        transaction_history.append(transaction)
+        user.set_transaction_history(transaction_history)
+
+        cart_list.clear()
+        user.set_cart(cart_list)
+        db['customer'] = user_dict
+        print(transaction_history)
+        db.close()
+
+    except IOError:
+        print("IOError")
+    except Exception as ex:
+        print(f"Exception Error as {ex}")
+    return redirect(url_for('home'))
 
 
 @app.route('/updateProducts/<int:id>/', methods=['GET', 'POST'])

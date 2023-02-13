@@ -2,6 +2,16 @@
 {% block title %}Dr. Donuts{% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+            <div class="alert {{category}} alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 <section class="h-100 h-custom">
   <div class="container h-100 py-5 w-75">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -18,10 +28,17 @@
               </tr>
             </thead>
             <tbody>
+            {% if cart_count == 0 %}
+            <tr style="border-style: none">
+              <td style="border-bottom-width: 0px">
+                <h1>Nothing in cart</h1>
+              </td>
+            </tr>
+            {% else %}
             {% for items in cart_list %}
 
 
-              <tr>
+              <tr style="border-style: none">
                 <th scope="row" class="border-bottom-0">
                   <div class="d-flex align-items-center">
                 <img src="{{ items.get_image() }}" class="img-fluid rounded-3" style="width: 120px;" alt="Book">
@@ -81,16 +98,21 @@
                 </td>
               </tr>
             {% endfor %}
+            {% endif %}
             </tbody>
           </table>
         </div>
 
         <div class="card shadow-2-strong mb-5 mb-lg-0 " style="background-color: transparent; border: none; border-top: 2px solid; border-radius: 0px; ">
-          <div class="card-body p-4" style="text-align: right;" >
+          <div class="card-body p-4" >
 
             <div class="row">
               <div class="col-md-6 col-lg-4 col-xl-6 mb-4 mb-md-0">
                 <form>
+                  {% if card_count == 0 %}
+                  <h1 class="text-right">No payment methods</h1>
+                  <a href="/addPaymentMethod" class="btn btn-primary">Add payment methods</a>
+                  {% else %}
                  {% for cards in card_list %}
                    <div class="d-flex flex-row pb-3">
                     <div class="d-flex align-items-center pe-2">
@@ -105,7 +127,7 @@
                     </div>
                   </div>
                   {% endfor %}
-
+                  {% endif %}
                 </form>
               </div>
 
@@ -123,16 +145,14 @@
                 <hr class="my-4">
 
                 <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-                  <p class="mb-2">Total (tax included)</p>
+                  <p class="mb-2">Total (shipping included)</p>
                   <p class="mb-2">$ {{total}} </p>
                 </div>
-
-                <button type="button" class="btn btn-primary btn-block btn-lg">
-                  <div class="d-flex justify-content-between">
-                    <span>Checkout</span>
-                  </div>
-                </button>
-
+                <a href="/checkOut">
+                  <button type="button" class="btn btn-primary btn-block btn-lg">
+                      <span>Checkout</span>
+                  </button>
+                </a>
               </div>
             </div>
 

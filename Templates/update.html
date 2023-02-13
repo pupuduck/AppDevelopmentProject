@@ -123,9 +123,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"in
                                     </div>
                                 </div>
                                 <div class="d-flex flex-row ">
-                                    <button type="button" class="btn btn-warning mb-0 ms-4" data-bs-toggle="modal" data-bs-target="#myModal2_{{cards.get_card_id()}}">
-                                        Edit details
-                                    </button>
+
                                     <form class='mb-0' action="{{url_for('remove_payment_method', card_id=cards.get_card_id())}}" method="POST">
                                         <!-- Button to Open the Modal -->
                                         <button type="button" class="btn btn-danger ms-4" data-bs-toggle="modal" data-bs-target="#myModal2_{{cards.get_card_id()}}">
@@ -181,34 +179,17 @@ href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"in
                                         <th class="border-gray-200" scope="col">Transaction ID</th>
                                         <th class="border-gray-200" scope="col">Date</th>
                                         <th class="border-gray-200" scope="col">Amount</th>
-                                        <th class="border-gray-200" scope="col">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                {% for transactions in transaction_history %}
                                     <tr>
-                                        <td>#39201</td>
-                                        <td>06/15/2021</td>
-                                        <td>$29.99</td>
-                                        <td><span class="badge bg-light text-dark">Pending</span></td>
+                                        <td>{{ transactions.get_transaction_id() }}</td>
+                                        <td>{{ transactions.get_date() }}</td>
+                                        <td>{{ transactions.get_amount() }}</td>
+
                                     </tr>
-                                    <tr>
-                                        <td>#38594</td>
-                                        <td>05/15/2021</td>
-                                        <td>$29.99</td>
-                                        <td><span class="badge bg-success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#38223</td>
-                                        <td>04/15/2021</td>
-                                        <td>$29.99</td>
-                                        <td><span class="badge bg-success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#38125</td>
-                                        <td>03/15/2021</td>
-                                        <td>$29.99</td>
-                                        <td><span class="badge bg-success">Paid</span></td>
-                                    </tr>
+                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
