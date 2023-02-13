@@ -651,8 +651,8 @@ def create_resumes():
         db['Resumes'] = resumes_dict
 
         db.close()
-
-        return redirect(url_for('retrieve_resumes'))
+        flash('Resume submitted!', category='success')
+        return redirect(url_for('home'))
     return render_template('createResumes.html', form=create_resumes_form)
 
 
