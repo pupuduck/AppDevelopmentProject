@@ -13,7 +13,11 @@
                 </div>
                 <div class="card-body">
                     <h5 class="cardtitle">{{ jobs.get_job_name() }}</h5>
-                    <div class="card-text">Availability: {{ jobs.get_job_availability() }}</div>
+                    {% if jobs.get_job_availability() == 'Available' %}
+                        <div class="card-text">Availability: <p style="color:green">{{ jobs.get_job_availability() }}</p></div>
+                    {% else %}
+                        <div class="card-text">Availability: <p style="color:red">{{ jobs.get_job_availability() }}</p></div>
+                    {% endif %}
                     <div class="card-text">Responsibility: {{ jobs.get_job_responsibility() }}</div>
                     <div class="card-text">Salary: {{ jobs.get_job_salary() }}</div>
                     <div class="card-text">
