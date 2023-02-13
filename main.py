@@ -800,15 +800,26 @@ def create_products():
 
 @app.route('/products')
 def display_product():
-    add_to_cart = AddToCart()
     products_dict = {}
-    db = shelve.open('DB/Product/product', 'r')
-    products_dict = db['Products']
-    db.close()
     products_list = []
-    for key in products_dict:
-        product = products_dict.get(key)
-        products_list.append(product)
+    add_to_cart = AddToCart()
+    try:
+        db = shelve.open('DB/Product/product')
+        if 'Products' in db:
+            products_dict = db['Products']
+        else:
+            db['Products'] = products_dict
+        db = shelve.open('DB/Product/product', 'r')
+        products_dict = db['Products']
+        db.close()
+        for key in products_dict:
+            product = products_dict.get(key)
+            products_list.append(product)
+
+    except IOError:
+        print("IOError")
+    except Exception as ex:
+        print(f"Exception Error as {ex}")
 
     return render_template('products.html', count=len(products_list), products_list=products_list, form=add_to_cart)
 
