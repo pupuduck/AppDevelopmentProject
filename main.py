@@ -732,13 +732,17 @@ def update_jobpositions(id):
         job_positions_dict = {}
         db = shelve.open('DB/Hiring/jobPositions')
         job_positions_dict = db['JobPositions']
-
+        image = Image.open(update_job_positions_form.job_image.data)
+        image.resize((300, 300))
+        random_hex = secrets.token_hex(8)
+        random_hex = "static/jobImages/" + random_hex + ".png"
+        image.save(random_hex)
         job_positions = job_positions_dict.get(id)
         job_positions.set_job_name(update_job_positions_form.job_name.data)
         job_positions.set_job_availability(update_job_positions_form.job_availability.data)
         job_positions.set_job_responsibility(update_job_positions_form.job_responsibility.data)
         job_positions.set_job_salary(update_job_positions_form.job_salary.data)
-
+        job_positions.set_job_image(random_hex)
         db['JobPositions'] = job_positions_dict
         db.close()
 
