@@ -883,17 +883,10 @@ def add_cart(product_id):
                 db2['Products'] = product_dict
 
             cart_id = len(cart) + 1
-            print(user_dict)
-            print(product_dict)
-            print(product_id)
             product = product_dict.get(product_id)
-
             cart_item = cartItems(product.get_name(), add_to_cart.Quantity.data, product.get_price(), product_id, cart_id)
             cart.append(cart_item)
-            print(cart)
-            print(cart[1].get_quantity())
             user.set_cart(cart)
-
             db['customer'] = user_dict
             db.close()
             db2.close()
@@ -904,6 +897,36 @@ def add_cart(product_id):
         except Exception as ex:
             print(f"Exception Error as {ex}")
         return redirect(url_for('display_product'))
+
+
+@app.route('/cart', methods=['GET', 'POST'])
+def cart():
+    user_dict = {}
+    cart_list = []
+    card_list = []
+    subtotal = 0
+    total = 0
+    try:
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            user_dict = db['customer']
+        else:
+            db['customer'] = user_dict
+
+        user = user_dict.get(current_user.get_id())
+        card_list = user.get_payment_methods()
+        cart_list = user.get_cart()
+        subtotal = 0
+        for items in cart_list:
+            subtotal += items.get_total_item_price()
+
+        total = float(subtotal) + 2.99
+
+    except IOError:
+        print("IOError")
+    except Exception as ex:
+        print(f"Exception Error as {ex}")
+    return render_template('cart.html', cart_list=cart_list, total=total, subtotal=subtotal, card_list=card_list)
 
 
 @app.route('/updateProducts/<int:id>/', methods=['GET', 'POST'])

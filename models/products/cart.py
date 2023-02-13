@@ -35,3 +35,6 @@ class cartItems:
 
     def get_cart_id(self):
         return self.__cart_id
+
+    def get_total_item_price(self):
+        return self.__quantity * self.__price
