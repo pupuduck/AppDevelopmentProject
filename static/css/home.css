@@ -1355,4 +1355,8 @@ section {
     font-size: 14px;
   }
 }
-
+img{
+height:100px;
+width:100px;
+border-radius:100%;
+}
