@@ -64,3 +64,14 @@ class CreditCardForm(FlaskForm):
     unit_number = StringField('Unit number', validators=[DataRequired()])
 
 
+class RequestResetForm(FlaskForm):
+    email = EmailField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo([password])])
+    submit = SubmitField('Reset Password')
+
+

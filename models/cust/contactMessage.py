@@ -1,11 +1,11 @@
 # User class
-class Message:
+class Messages:
     message_id = 0
 
     # initializer method
     def __init__(self, name, email, subject, message):
-        Message.message_id += 1
-        self.__message_id = Message.message_id
+        Messages.message_id += 1
+        self.__message_id = Messages.message_id
         self.__name = name
         self.__email = email
         self.__subject = subject

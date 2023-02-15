@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-from flask_login import LoginManager, login_user, logout_user, current_user, login_required
-from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm, UpdatePasswordForm, CreditCardForm
+from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask_login import login_user, logout_user, current_user, login_required
+from flask_mail import Message
+from models.auth.auth_forms import RegisterForm, LoginForm, UpdateProfileForm, UpdatePasswordForm, CreditCardForm, ResetPasswordForm, RequestResetForm
 from models.auth.user import User
 from models.auth.paymentMethods import paymentMethods
-from models.cust.contactMessage import Message
+from models.cust.contactMessage import Messages
 from models.cust.contactForm import CreateMessageForm
 from models.hiring.hiringForm import CreateResumesForm, CreateJobPositionsForm
 from models.hiring.resume import Resumes
@@ -16,6 +17,7 @@ from models.auth.transaction_history import transactionHistory
 from models.report.report import Report
 from models.report.reportForm import CreateReportForm
 from PIL import Image
+from config import *
 import secrets
 import shelve
 import calendar
@@ -23,11 +25,18 @@ import time
 from datetime import datetime
 
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "xxkxcZKH2TxsSw7bew8D9gLpCaa3YYnn"
-
-login_manager = LoginManager()
-login_manager.init_app(app)
+# app = Flask(__name__)
+# app.config["SECRET_KEY"] = "xxkxcZKH2TxsSw7bew8D9gLpCaa3YYnn"
+#
+# app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+# app.config['MAIL_PORT'] = '587'
+# app.config['MAIL_USE_TLS'] = True
+# app.config['MAIL_USERNAME'] = "DoctorDonutServices"
+# app.config['MAIL_PASSWORD'] = "DoctorDonut1447!"
+# mail = Mail(app)
+#
+# login_manager = LoginManager()
+# login_manager.init_app(app)
 
 
 # start of account management
@@ -556,13 +565,83 @@ def delete_user(user_id):
         db.close()
         flash('Account successfully deleted!', category='alert-success')
     except IOError:
-        print('Error IO error')
+        print("IOError")
+    except Exception as ex:
+        print(f"Exception Error as {ex}")
 
     return redirect(url_for('retrieve_users'))
 
 
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request', sender='doctordonutservices@gmail.com', recipients=[user.get_email()])
+    msg.body = f""" To reset your password, visit the following link:
+{url_for('reset_token', token=token, _external=True)}
+
+If you did not make this request, then simply ignore this email and no changes will be made
+"""
+    mail.send(msg)
+
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        users_dict = {}
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            users_dict = db['customer']
+        else:
+            db['customer'] = users_dict
+        db.close()
+        for users in users_dict.values():
+            if users.get_email() == form.email.data:
+                print(type(users))
+                print(users)
+                print(users.get_email())
+                send_reset_email(users)
+                flash('An email has been sent with instructions to reset your password', 'alert-success')
+                return redirect(url_for('login'))
+
+    return render_template('reset_request.html', title='Reset Password', form=form)
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'alert-danger')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    error = None
+    if request.method == "POST":
+        users_dict = {}
+        try:
+            db = shelve.open('DB/Customer/customer')
+            if 'customer' in db:
+                users_dict = db['customer']
+            else:
+                db['customer'] = users_dict
+            if form.password.data == form.confirm_password.data:
+                user.set_password(form.password.data)
+            else:
+                error = "Both passwords do not match"
+            users_dict[user.get_id()] = user
+            db['customer'] = users_dict
+            db.close()
+        except IOError:
+            print("IOError")
+        except Exception as ex:
+            print(f"Exception Error as {ex}")
+    return render_template('reset_token.html', title='Reset Password', form=form, error=error)
 # end of account management
 # start customer support
+
+
 @app.route('/messagesOverview')
 def messages_overview():
     return render_template('messagesOverview.html')
@@ -584,7 +663,7 @@ def contactUs():
             else:
                 db['message'] = message_dict
 
-            message = Message(name, email, subject, message)
+            message = Messages(name, email, subject, message)
             message_dict[message.get_message_id()] = message
             db['message'] = message_dict
             db.close()

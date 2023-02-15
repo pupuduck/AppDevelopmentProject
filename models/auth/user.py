@@ -1,4 +1,7 @@
 from flask_login import UserMixin
+import jwt
+from config import app
+import shelve
 
 
 class User(UserMixin):
@@ -94,3 +97,29 @@ class User(UserMixin):
 
     def get_transaction_history(self):
         return self.__transaction_history
+
+    def get_reset_token(self):
+        payload = {'user_id': self.__id}
+        token = jwt.encode(payload=payload, key=app.config['SECRET_KEY'])
+
+        return token
+
+    @staticmethod
+    def verify_reset_token(token):
+        users_dict = {}
+        # try:
+        user_id = jwt.decode(token, key=app.config['SECRET_KEY'], algorithms=['HS256'])['user_id']
+
+        db = shelve.open('DB/Customer/customer')
+        if 'customer' in db:
+            users_dict = db['customer']
+        else:
+            db['customer'] = users_dict
+        db.close()
+        # except IOError:
+        #     print("IOError")
+        # except Exception as ex:
+        #     print(f"Exception Error as {ex} 2")
+        #     return None
+        return users_dict.get(str(user_id))
+
