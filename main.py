@@ -350,13 +350,12 @@ def remove_payment_method(card_id):
             db['customer'] = user_dict
 
         card_list = []
-        for user in user_dict.values():
-            if user.get_id() == current_user.get_id():
-                card_list = user.get_payment_methods()
-                for cards in card_list:
-                    if cards.get_card_id() == card_id:
-                        index = card_list.index(cards)
-                        del card_list[index]
+        user = user_dict.get(current_user.get_id())
+        card_list = user.get_payment_methods()
+        for cards in card_list:
+            if cards.get_card_id() == card_id:
+                index = card_list.index(cards)
+                del card_list[index]
             user.set_payment_methods(card_list)
             user_dict[user.get_id()] = user
             db['customer'] = user_dict
@@ -633,6 +632,8 @@ def reset_token(token):
             users_dict[user.get_id()] = user
             db['customer'] = users_dict
             db.close()
+            flash('Password changed successfully', 'alert-success')
+            return redirect(url_for('login'))
         except IOError:
             print("IOError")
         except Exception as ex:

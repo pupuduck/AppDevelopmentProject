@@ -208,21 +208,23 @@ href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"in
                     <div class="card-header">Change Password</div>
                     <div class="card-body">
                         <form method="post">
+
                             <!-- Form Group (current password)-->
                             <div class="mb-3">
                                 {{ update_password_form.password1.label( class="label") }}
-                                {{ update_password_form.password1(class="form-control") }}
+                                {{ update_password_form.password1(class="form-control", id="myInput") }}
                             </div>
                             <!-- Form Group (new password)-->
                             <div class="mb-3">
                                 {{ update_password_form.password2.label( class="label") }}
-                                {{ update_password_form.password2(class="form-control") }}
+                                {{ update_password_form.password2(class="form-control", id="myInput") }}
                             </div>
                             <!-- Form Group (confirm password)-->
                             <div class="mb-3">
                                 {{ update_password_form.password3.label( class="label") }}
-                                {{ update_password_form.password3(class="form-control") }}
+                                {{ update_password_form.password3(class="form-control", id="myInput") }}
                             </div>
+                            <input type="checkbox" onclick="myFunction()">Show Password
                             {{ update_password_form.submit2(class="btn btn-primary") }}
                         </form>
                     </div>
@@ -255,7 +257,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"in
 
                                   <!-- Modal body -->
                                   <div class="modal-body">
-                                    Are you sure you want to delete {{current_user.get_id()}} account?
+                                    Are you sure you want to delete {{current_user.get_username()}} account?
                                   </div>
 
                                   <!-- Modal footer -->
@@ -284,5 +286,15 @@ href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"in
     $(document).ready(function () {
     $('#Mytable').DataTable();
         });
+</script>
+<script>
+function myFunction() {
+  var x = document.getElementById("myInput");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
 </script>
 {% endblock %}

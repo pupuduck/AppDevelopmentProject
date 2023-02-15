@@ -43,7 +43,8 @@
 
                   <div class="form-outline mb-4">
                     {{ form.password.label( class="form-label") }}
-                    {{ form.password(class="form-control form-control-lg") }}
+                    {{ form.password(class="form-control form-control-lg", id="myInput") }}
+                    <input type="checkbox" onclick="myFunction()">Show Password
                   </div>
 
                   {% if error %}
@@ -68,4 +69,15 @@
     </div>
   </div>
 </section>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myInput");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
 {% endblock %}

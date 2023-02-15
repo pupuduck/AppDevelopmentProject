@@ -17,12 +17,19 @@
 
                 <div class="form-outline mb-4">
                   {{form.password.label( class="form-email") }}
-                  {{ form.password(class="form-control form-control-lg") }}
+                  {{ form.password(class="form-control form-control-lg", id="myInput1") }}
+                  <input type="checkbox" onclick="myFunction()">Show Password
                 </div>
+
+
                 <div class="form-outline mb-4">
+                  <span>
                   {{form.confirm_password.label( class="form-email") }}
-                  {{ form.confirm_password(class="form-control form-control-lg") }}
+                  {{ form.confirm_password(class="form-control form-control-lg", id="myInput2") }}
+                  <input type="checkbox" onclick="myFunction2()">Show Password
+                  </span>
                 </div>
+
                 {% if error %}
                   <p class="text-danger mb-1 pb-lg-1">{{error}}</p>
                 {% endif %}
@@ -39,4 +46,23 @@
     </div>
   </div>
 </section>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myInput1");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+function myFunction2() {
+  var x = document.getElementById("myInput2");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
 {% endblock %}
