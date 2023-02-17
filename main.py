@@ -1301,7 +1301,7 @@ def delete_report(id):
     return redirect(url_for('retrieve_reports'))
 
 
-massAccount(20)
+# massAccount(20)
 
 
 if __name__ == '__main__':
