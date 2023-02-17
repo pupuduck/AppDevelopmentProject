@@ -459,7 +459,9 @@ def massAccount(amount):
         else:
             db['customer'] = cust_dict
         for i in range(amount):
-            Admin = User(f"test{i+1}", f"test{i+1}@gmail.com", "TESTTEST", int(i+1), 'Admin', "Active")
+            id = len(cust_dict) + 1
+            Admin = User(f"test{i+1}", f"test{i+1}@gmail.com", "TESTTEST", id, 'Admin', "Active")
+            print(f'{id} account created')
 
             cust_dict[Admin.get_id()] = Admin
             db['customer'] = cust_dict
@@ -1299,7 +1301,7 @@ def delete_report(id):
     return redirect(url_for('retrieve_reports'))
 
 
-# massAccount(20)
+# massAccount(10)
 
 
 if __name__ == '__main__':
