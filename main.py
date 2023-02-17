@@ -626,14 +626,18 @@ def reset_token(token):
             else:
                 db['customer'] = users_dict
             if form.password.data == form.confirm_password.data:
+                print(user)
                 user.set_password(form.password.data)
+                print(form.password.data)
+                flash('Password changed successfully', 'alert-success')
+
             else:
                 error = "Both passwords do not match"
             users_dict[user.get_id()] = user
             db['customer'] = users_dict
             db.close()
-            flash('Password changed successfully', 'alert-success')
             return redirect(url_for('login'))
+
         except IOError:
             print("IOError")
         except Exception as ex:
@@ -1295,6 +1299,9 @@ def delete_report(id):
     db.close()
 
     return redirect(url_for('retrieve_reports'))
+
+
+massAccount(20)
 
 
 if __name__ == '__main__':

@@ -31,8 +31,8 @@ tomli==2.0.1
 torch==1.13.1
 torchvision==0.14.1
 tqdm==4.64.1
-typing_extensions==4.4.0
+typing_extensions==4.5.0
 urllib3==1.26.14
-Werkzeug==2.2.2
+Werkzeug==2.2.3
 WTForms==3.0.1
 zipp==3.13.0

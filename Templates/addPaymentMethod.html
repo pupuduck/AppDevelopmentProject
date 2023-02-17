@@ -27,7 +27,9 @@
                 <div class="form-outline">
                   {{ form.card_number.label( class="form-label") }}
                   {{ form.card_number(class="form-control form-control-lg", id="num", oninput="return onlynum()", maxlength="16") }}
-
+                  {% if error %}
+                    <p class="text-danger mb-1 pb-lg-1">{{error}}</p>
+                  {% endif %}
                 </div>
 
               </div>
@@ -90,9 +92,7 @@
                 </div>
               </div>
             </div>
-            {% if error %}
-                    <p class="text-danger mb-1 pb-lg-1">{{error}}</p>
-                  {% endif %}
+
             <button class="btn btn-success btn-lg btn-block">Add card</button>
           </form>
         </div>

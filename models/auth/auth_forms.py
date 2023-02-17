@@ -51,7 +51,7 @@ class UpdatePasswordForm(FlaskForm):
 class CreditCardForm(FlaskForm):
     full_name = StringField('Cardholder name', validators=[DataRequired()])
     card_number = StringField('Card number', validators=[DataRequired(), Length(16)])
-    cvv = StringField('CVV', validators=[Length(3)])
+    cvv = PasswordField('CVV', validators=[Length(3)])
     expiry_month = SelectField('Expiry Month', choices=[(1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'),
                                                         (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'),
                                                         (11, '11'), (12, '12')])
