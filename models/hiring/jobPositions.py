@@ -1,9 +1,7 @@
 class JobPositions:
-    count_id = 0
 
-    def __init__(self, job_name, job_availability, job_responsibility, job_salary, job_image):
-        JobPositions.count_id += 1
-        self.__id = JobPositions.count_id
+    def __init__(self, job_name, job_availability, job_responsibility, job_salary, job_image, id):
+        self.__id = id
         self.__job_name = job_name
         self.__job_availability = job_availability
         self.__job_responsibility = job_responsibility
@@ -19,7 +17,6 @@ class JobPositions:
 
     def get_job_availability(self):
         return self.__job_availability
-
 
     def get_job_responsibility(self):
         return self.__job_responsibility
@@ -40,7 +37,6 @@ class JobPositions:
 
     def set_job_availability(self, job_availability):
         self.__job_availability = job_availability
-
 
     def set_job_responsibility(self, job_responsiblity):
         self.__job_responsibility = job_responsiblity

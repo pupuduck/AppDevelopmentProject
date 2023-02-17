@@ -349,7 +349,6 @@ def remove_payment_method(card_id):
         else:
             db['customer'] = user_dict
 
-        card_list = []
         user = user_dict.get(current_user.get_id())
         card_list = user.get_payment_methods()
         for cards in card_list:
@@ -718,16 +717,15 @@ def create_resumes():
     if request.method == 'POST' and create_resumes_form.validate():
         resumes_dict = {}
         db = shelve.open('DB/Hiring/resume')
-
         try:
             resumes_dict = db['Resumes']
         except:
             print("Error in retrieving Resumes from Resumes.db.")
-
+        id = len(resumes_dict) + 1
         resumes = Resumes(create_resumes_form.first_name.data, create_resumes_form.last_name.data,
                           create_resumes_form.email.data, create_resumes_form.sgorpr.data,
                           create_resumes_form.citizenship.data, create_resumes_form.address.data,
-                          create_resumes_form.contactno.data, create_resumes_form.preferredjob.data,create_resumes_form.uploadfile.data )
+                          create_resumes_form.contactno.data, create_resumes_form.preferredjob.data,create_resumes_form.uploadfile.data, id)
         for key in resumes_dict:
             if key == resumes.get_resumes_id():
                 resumes.set_resumes_id(int(resumes.get_resumes_id()) + 1)
@@ -755,12 +753,12 @@ def create_job_positions():
             job_positions_dict = db['JobPositions']
         except:
             print("Error in retrieving Job Positions from JobPositions.db.")
-
+        id = len(job_positions_dict) + 1
         job_position = JobPositions(create_job_positions_form.job_name.data,
                                     create_job_positions_form.job_availability.data,
                                     create_job_positions_form.job_responsibility.data,
                                     create_job_positions_form.job_salary.data,
-                                    random_hex)
+                                    random_hex, id)
         for key in job_positions_dict:
             if key == job_position.get_id():
                 job_position.set_id(int(job_position.get_id() + 1))
@@ -916,9 +914,9 @@ def create_products():
                 products_dict = db['Products']
             else:
                 db['Products'] = products_dict
-
+            id = len(products_dict) + 1
             product = Product(create_product_form.Name.data, create_product_form.Rating.data,
-                              create_product_form.Description.data, round(create_product_form.Price.data, 2), random_hex)
+                              create_product_form.Description.data, round(create_product_form.Price.data, 2), random_hex, id)
             products_dict[product.get_product_id()] = product
             db['Products'] = products_dict
             db.close()

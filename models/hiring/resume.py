@@ -1,11 +1,9 @@
 # Hiring class
 class Resumes:
-    count_id = 0
 
     # initializer method
-    def __init__(self, first_name, last_name, email, sgorpr,citizenship, address,contactno,preferredjob,uploadfile):
-        Resumes.count_id += 1
-        self.__resumes_id = Resumes.count_id
+    def __init__(self, first_name, last_name, email, sgorpr,citizenship, address,contactno,preferredjob,uploadfile, id):
+        self.__resumes_id = id
         self.__first_name = first_name
         self.__last_name = last_name
         self.__email = email

@@ -1,10 +1,8 @@
 class Product:
-    count_id = 0
 
     # initializer method
-    def __init__(self, name, rating, description, price, image):
-        Product.count_id += 1
-        self.__product_id = Product.count_id
+    def __init__(self, name, rating, description, price, image, id):
+        self.__product_id = id
         self.__name = name
         self.__rating = rating
         self.__description = description
